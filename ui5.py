@@ -21,9 +21,6 @@ class TokenAnalysisView(Static):
         """Create tables for token analysis"""
         yield Static("next token", classes="table-header")
         yield DataTable(id="token-table")
-        with Horizontal():
-            yield DataTable(id="top-tokens")
-            yield DataTable(id="concept-distances")
     
     def on_mount(self) -> None:
         """Initialize the data tables"""
@@ -37,14 +34,6 @@ class TokenAnalysisView(Static):
             "top(n=4)|v", "top(n=4)|p",
             "top(n=5)|v", "top(n=5)|p"
         )
-        
-        # Top tokens table
-        top_tokens = self.query_one("#top-tokens", DataTable)
-        top_tokens.add_columns("Token", "Probability")
-        
-        # Concept distances table
-        distances = self.query_one("#concept-distances", DataTable)
-        distances.add_columns("Token", "Technical", "Emotional", "Formal")
 
     def update_current_tokens(self, tokens: List[Tuple[str, int]], locked_positions: set = None, predictions: List[List[Tuple[str, float]]] = None):
         """Update the current tokens display"""
@@ -70,15 +59,6 @@ class TokenAnalysisView(Static):
             
             table.add_row(str(pos), token, str(token_id), is_locked, *pred_values)
 
-    def update_predictions(self, tokens: List[Tuple[str, float, np.ndarray]]):
-        """Update the token predictions"""
-        top_tokens = self.query_one("#top-tokens", DataTable)
-        top_tokens.clear()
-        
-        # Show top 5 predictions
-        sorted_tokens = sorted(tokens, key=lambda x: x[1], reverse=True)[:5]
-        for token, prob, _ in sorted_tokens:
-            top_tokens.add_row(token, f"{prob:.4f}")
 
 class TokenExplorer(App):
     """Interactive token exploration interface"""
@@ -102,12 +82,6 @@ class TokenExplorer(App):
     }
     
     #token-table {
-        height: 1fr;
-        margin: 1;
-    }
-    
-    #top-tokens, #concept-distances {
-        width: 1fr;
         height: 1fr;
         margin: 1;
     }
