@@ -67,8 +67,8 @@ class TopTokenAnalysisView(Static):
         try:
             log = self.query_one(Log)
             log.write_line("Top table starting token update")
-        except:
-            pass
+        except Exception as e:
+            print(f"Error in TopTokenAnalysisView.update_current_tokens: {type(e).__name__}: {str(e)}")
 
         table = self.query_one("#top-token-table", DataTable)
         table.clear()
@@ -138,8 +138,8 @@ class BottomTokenAnalysisView(Static):
         try:
             log = self.query_one(Log)
             log.write_line("Bottom table starting token update")
-        except:
-            pass
+        except Exception as e:
+            print(f"Error in BottomTokenAnalysisView.update_current_tokens: {type(e).__name__}: {str(e)}")
 
         table = self.query_one("#bottom-token-table", DataTable)
         table.clear()
