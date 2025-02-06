@@ -3,6 +3,8 @@ A UI for exploring geometric transformation concepts.
 Visualize and manipulate embedding spaces and attention patterns.
 """
 
+import mlx.core as mx
+from mlx_lm import load, generate
 from textual.app import App, ComposeResult
 from textual.containers import Horizontal, Vertical
 from textual.widgets import Header, Footer, Static, DataTable, TextArea
