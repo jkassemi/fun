@@ -14,18 +14,17 @@ from textual import events
 import numpy as np
 from typing import List, Dict, Tuple
 
-class TokenAnalysisView(Static):
-    """Shows token analysis in various forms"""
+class TopTokenAnalysisView(Static):
+    """Shows top token predictions"""
     
     def compose(self) -> ComposeResult:
         """Create tables for token analysis"""
-        yield Static("next token", classes="table-header")
-        yield DataTable(id="token-table")
+        yield Static("Top Predictions", classes="table-header")
+        yield DataTable(id="top-token-table")
     
     def on_mount(self) -> None:
         """Initialize the data tables"""
-        # Current tokens table
-        token_table = self.query_one("#token-table", DataTable)
+        token_table = self.query_one("#top-token-table", DataTable)
         token_table.add_columns(
             "Position", "Token", "ID", "Is Locked",
             "top(n=1)|v", "top(n=1)|p",
@@ -33,6 +32,26 @@ class TokenAnalysisView(Static):
             "top(n=3)|v", "top(n=3)|p",
             "top(n=4)|v", "top(n=4)|p",
             "top(n=5)|v", "top(n=5)|p"
+        )
+
+class BottomTokenAnalysisView(Static):
+    """Shows bottom token predictions"""
+    
+    def compose(self) -> ComposeResult:
+        """Create tables for token analysis"""
+        yield Static("Bottom Predictions", classes="table-header")
+        yield DataTable(id="bottom-token-table")
+    
+    def on_mount(self) -> None:
+        """Initialize the data tables"""
+        token_table = self.query_one("#bottom-token-table", DataTable)
+        token_table.add_columns(
+            "Position", "Token", "ID", "Is Locked",
+            "bottom(n=1)|v", "bottom(n=1)|p",
+            "bottom(n=2)|v", "bottom(n=2)|p", 
+            "bottom(n=3)|v", "bottom(n=3)|p",
+            "bottom(n=4)|v", "bottom(n=4)|p",
+            "bottom(n=5)|v", "bottom(n=5)|p"
         )
 
     def update_current_tokens(self, tokens: List[Tuple[str, int]], locked_positions: set = None, predictions: List[List[Tuple[str, float]]] = None):
@@ -76,12 +95,12 @@ class TokenExplorer(App):
         margin: 1;
     }
     
-    TokenAnalysisView {
-        height: 2fr;
+    TopTokenAnalysisView, BottomTokenAnalysisView {
+        height: 1fr;
         border: solid blue;
     }
     
-    #token-table {
+    #top-token-table, #bottom-token-table {
         height: 1fr;
         margin: 1;
     }
@@ -91,13 +110,15 @@ class TokenExplorer(App):
         """Create child widgets for the app."""
         yield Header()
         yield TextArea()
-        yield TokenAnalysisView()
+        yield TopTokenAnalysisView()
+        yield BottomTokenAnalysisView()
         yield Footer()
 
     def on_mount(self) -> None:
         """Set up initial state when app starts."""
         # Set up mock data
-        analysis = self.query_one(TokenAnalysisView)
+        top_analysis = self.query_one(TopTokenAnalysisView)
+        bottom_analysis = self.query_one(BottomTokenAnalysisView)
         # Mock data with predictions for each token
         mock_predictions = [
             [("is", 0.25), ("was", 0.15), ("and", 0.10), ("has", 0.08), ("will", 0.05)],
@@ -138,8 +159,11 @@ class TokenExplorer(App):
         ]
         mock_predictions = [example_predictions for _ in range(len(tokens))]
         
-        analysis = self.query_one(TokenAnalysisView)
-        analysis.update_current_tokens(tokens, predictions=mock_predictions)
+        top_analysis = self.query_one(TopTokenAnalysisView)
+        bottom_analysis = self.query_one(BottomTokenAnalysisView)
+        
+        top_analysis.update_current_tokens(tokens, predictions=mock_predictions)
+        bottom_analysis.update_current_tokens(tokens, predictions=mock_predictions)
 
 if __name__ == "__main__":
     import sys
