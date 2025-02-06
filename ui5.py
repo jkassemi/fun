@@ -396,10 +396,15 @@ class TokenExplorer(App):
             bottom_analysis.update_current_tokens(tokens, predictions=predictions)
         except Exception as e:
             try:
+                import traceback
                 log = self.query_one(Log)
                 log.write_line(f"Error in _handle_inactivity: {type(e).__name__}: {str(e)}")
-            except:
-                pass
+                log.write_line("Traceback:")
+                for line in traceback.format_exc().split('\n'):
+                    log.write_line(line)
+            except Exception as inner_e:
+                print(f"Failed to log error: {inner_e}")
+                print(traceback.format_exc())
 
 
 if __name__ == "__main__":
