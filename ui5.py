@@ -123,7 +123,6 @@ if __name__ == "__main__":
     
     # Allow --test flag for automated testing
     if "--test" in sys.argv:
-        # Run test code here
         print("Running in test mode")
         
         # Create test app
@@ -133,9 +132,18 @@ if __name__ == "__main__":
         text_area = test_app.query_one(TextArea)
         text_area.text = "Test input"
         
-        # Print available attributes
+        # Create test event and inspect it
         test_event = TextArea.Changed(text_area)
-        print("\nAvailable event attributes:")
-        print(dir(test_event))
+        print("\nEvent type:", type(test_event))
+        print("\nBase classes:", test_event.__class__.__bases__)
+        print("\nAll attributes:", dir(test_event))
+        print("\nEvent dict:", vars(test_event))
+        
+        # Test the actual handler
+        try:
+            test_app.on_text_area_changed(test_event)
+            print("\nHandler executed successfully")
+        except Exception as e:
+            print(f"\nHandler error: {type(e).__name__}: {str(e)}")
     else:
         app.run()
