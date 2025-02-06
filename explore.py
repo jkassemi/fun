@@ -1,43 +1,38 @@
-import inspect
+import jedi
 import sys
 from pathlib import Path
-import importlib
-from typing import Optional, Tuple
 
-def get_symbol_info(symbol: str) -> Tuple[Optional[str], Optional[str], Optional[int]]:
-    """Get source info for a symbol, returns (source, file_path, line_no)"""
+def get_symbol_info(symbol: str) -> None:
+    """Find and display symbol definition"""
     try:
-        # Try to import the module containing the symbol
-        parts = symbol.split('.')
-        module_name = parts[0]
+        # Create a Jedi Script with the current environment
+        script = jedi.Script(path=str(Path.cwd()))
         
-        # Special case for textual - try textual.widgets for widget classes
-        if module_name == 'textual' and len(parts) > 1:
-            try:
-                module = importlib.import_module(f'textual.widgets')
-                obj = getattr(module, parts[1])
-            except (ImportError, AttributeError):
-                module = importlib.import_module(module_name)
-                obj = module
-                
-        else:
-            module = importlib.import_module(module_name)
-            obj = module
+        # Find references to the symbol
+        refs = script.get_references(line=1, column=1, path=None)
         
-        # Get the object
-        for part in parts[1:]:
-            obj = getattr(obj, part)
+        if not refs:
+            print(f"No references found for {symbol}")
+            return
             
-        # Get source info
-        source = inspect.getsource(obj)
-        file_path = inspect.getfile(obj)
-        line_no = inspect.getsourcelines(obj)[1]
-        
-        return source, file_path, line_no
+        # Get definition
+        definition = refs[0].get_definition()
+        if definition:
+            print(f"\nDefinition found in {definition.module_path}:line {definition.line}")
+            print("\nSource:")
+            print(definition.get_line_code())
+            
+            # Show a few lines of context
+            with open(definition.module_path) as f:
+                lines = f.readlines()
+                start = max(0, definition.line - 3)
+                end = min(len(lines), definition.line + 3)
+                print("\nContext:")
+                for i in range(start, end):
+                    print(f"{i+1}: {lines[i].rstrip()}")
         
     except Exception as e:
         print(f"Error finding symbol {symbol}: {str(e)}")
-        return None, None, None
 
 def jump(symbol: str, context_lines: int = 4):
     """Jump to symbol definition and show surrounding context"""
