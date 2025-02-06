@@ -143,29 +143,27 @@ class TokenExplorer(App):
         # Set up mock data
         top_analysis = self.query_one(TopTokenAnalysisView)
         bottom_analysis = self.query_one(BottomTokenAnalysisView)
+        text_area = self.query_one(TextArea)
         
-        # Sample tokens
+        # Set initial text
+        text_area.text = "The quick"
+        
+        # Sample tokens - just the ones from our text
         tokens = [
             ("The", 464),
-            ("quick", 4789),
-            ("brown", 7891),
-            ("fox", 2345)
+            ("quick", 4789)
         ]
         
-        # Mock top predictions
+        # Mock top predictions for just our two tokens
         top_predictions = [
             [("is", 0.95), ("was", 0.85), ("and", 0.80), ("has", 0.78), ("will", 0.75)],
-            [("brown", 0.90), ("red", 0.85), ("lazy", 0.80), ("small", 0.78), ("big", 0.75)],
-            [("fox", 0.90), ("dog", 0.80), ("cat", 0.75), ("bear", 0.70), ("wolf", 0.65)],
-            [("jumps", 0.85), ("runs", 0.75), ("leaps", 0.70), ("walks", 0.68), ("sits", 0.65)]
+            [("brown", 0.90), ("red", 0.85), ("lazy", 0.80), ("small", 0.78), ("big", 0.75)]
         ]
         
-        # Mock bottom predictions
+        # Mock bottom predictions for just our two tokens
         bottom_predictions = [
             [("xyz", 0.05), ("123", 0.04), ("@#$", 0.03), ("...", 0.02), ("???", 0.01)],
-            [("9876", 0.06), ("qwer", 0.05), ("asdf", 0.04), ("zxcv", 0.03), ("jklm", 0.02)],
-            [("!!!!", 0.04), ("****", 0.03), ("____", 0.02), ("^^^^", 0.01), (">>>>", 0.005)],
-            [("0000", 0.03), ("1111", 0.02), ("2222", 0.01), ("3333", 0.005), ("4444", 0.001)]
+            [("9876", 0.06), ("qwer", 0.05), ("asdf", 0.04), ("zxcv", 0.03), ("jklm", 0.02)]
         ]
         
         top_analysis.update_current_tokens(tokens, predictions=top_predictions)
