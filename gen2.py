@@ -28,6 +28,93 @@ from transformers import AutoTokenizer
 from typing import Dict, List, Tuple, Optional, Union
 import numpy.typing as npt
 
+class GeometricTransform(nn.Module):
+    def __init__(
+        self, original_embed: nn.Embedding, num_reference_points: int = 4
+    ) -> None:
+        super().__init__()
+        self.original_embed: nn.Embedding = original_embed
+
+        self.reference_points: mx.array = mx.random.normal((num_reference_points, 3584))
+        self.strengths: mx.array = mx.ones((num_reference_points,))
+
+        # Initialize importance tracking
+        self.importance_tracker: ImportanceTracker = ImportanceTracker(3584)
+
+        # Add concept basis vectors
+        self.concept_embeddings: Dict[str, mx.array] = {}
+        self.diffusion_fields: List[DiffusionField] = []
+
+    def add_concept(self, name: str, embedding: mx.array) -> None:
+        """Add a concept embedding to use as a reference point"""
+        normalized_embedding: mx.array = embedding / (mx.linalg.norm(embedding) + 1e-6)
+        self.concept_embeddings[name] = normalized_embedding
+
+    def apply_importance(self, embedded: mx.array, seq_len: int) -> mx.array:
+        """Apply importance weighting to embeddings"""
+        importance_mask: mx.array = self.importance_tracker.get_importance_mask(seq_len)
+        return embedded * (1 + importance_mask.reshape(-1, 1))
+
+    def add_diffusion_field(
+        self, center: mx.array, strength: float, decay_rate: float = 1.0
+    ) -> None:
+        """Add a new diffusion field to influence embeddings"""
+        field: DiffusionField = DiffusionField(center, strength, decay_rate)
+        self.diffusion_fields.append(field)
+
+    def __call__(self, x: mx.array) -> mx.array:
+        embedded: mx.array = self.original_embed(x)
+        batch_size, seq_len, hidden_size = embedded.shape
+        embedded_flat: mx.array = embedded.reshape(-1, hidden_size)
+
+        embedded_norm: mx.array = embedded_flat / (
+            mx.linalg.norm(embedded_flat, axis=-1, keepdims=True) + 1e-6
+        )
+        ref_norm: mx.array = self.reference_points / (
+            mx.linalg.norm(self.reference_points, axis=-1, keepdims=True) + 1e-6
+        )
+
+        similarities: mx.array = mx.matmul(embedded_norm, ref_norm.transpose())
+
+        # apply geometric transformation
+        transformed: mx.array = embedded_flat + mx.matmul(
+            similarities, self.strengths[:, None] * self.reference_points
+        )
+
+        # apply importance weighting
+        transformed = self.apply_importance(transformed, seq_len)
+
+        # apply concept-based transformations
+        for concept_name, concept_embedding in self.concept_embeddings.items():
+            concept_similarity: mx.array = mx.matmul(embedded_norm, concept_embedding)
+            transformed = (
+                transformed + concept_similarity.reshape(-1, 1) * concept_embedding
+            )
+
+        return transformed.reshape(batch_size, seq_len, hidden_size)
+
+    def as_linear(self, x: mx.array) -> mx.array:
+        return self.original_embed.as_linear(x)
+
+class ContextLens:
+    def __init__(
+        self,
+        name: str,
+        trigger_embeddings: List[mx.array],
+        activation_threshold: float = 0.85,
+    ) -> None:
+        self.name = name
+        self.trigger_embeddings = (
+            trigger_embeddings  # Embeddings that activate this lens
+        )
+        self.threshold = activation_threshold
+        self.transform_strength = mx.array([1.0])  # Learnable parameter
+
+        # Cache for quick pattern matching
+        self.pattern_cache = {}
+
+
+
 class AdaptiveGeometricTransform(GeometricTransform):
     def __init__(
         self, original_embed: nn.Embedding, num_reference_points: int = 4
@@ -186,74 +273,6 @@ class DiffusionField:
         return self.strength * decay.reshape(-1, 1) * self.center
 
 
-class GeometricTransform(nn.Module):
-    def __init__(
-        self, original_embed: nn.Embedding, num_reference_points: int = 4
-    ) -> None:
-        super().__init__()
-        self.original_embed: nn.Embedding = original_embed
-
-        self.reference_points: mx.array = mx.random.normal((num_reference_points, 3584))
-        self.strengths: mx.array = mx.ones((num_reference_points,))
-
-        # Initialize importance tracking
-        self.importance_tracker: ImportanceTracker = ImportanceTracker(3584)
-
-        # Add concept basis vectors
-        self.concept_embeddings: Dict[str, mx.array] = {}
-        self.diffusion_fields: List[DiffusionField] = []
-
-    def add_concept(self, name: str, embedding: mx.array) -> None:
-        """Add a concept embedding to use as a reference point"""
-        normalized_embedding: mx.array = embedding / (mx.linalg.norm(embedding) + 1e-6)
-        self.concept_embeddings[name] = normalized_embedding
-
-    def apply_importance(self, embedded: mx.array, seq_len: int) -> mx.array:
-        """Apply importance weighting to embeddings"""
-        importance_mask: mx.array = self.importance_tracker.get_importance_mask(seq_len)
-        return embedded * (1 + importance_mask.reshape(-1, 1))
-
-    def add_diffusion_field(
-        self, center: mx.array, strength: float, decay_rate: float = 1.0
-    ) -> None:
-        """Add a new diffusion field to influence embeddings"""
-        field: DiffusionField = DiffusionField(center, strength, decay_rate)
-        self.diffusion_fields.append(field)
-
-    def __call__(self, x: mx.array) -> mx.array:
-        embedded: mx.array = self.original_embed(x)
-        batch_size, seq_len, hidden_size = embedded.shape
-        embedded_flat: mx.array = embedded.reshape(-1, hidden_size)
-
-        embedded_norm: mx.array = embedded_flat / (
-            mx.linalg.norm(embedded_flat, axis=-1, keepdims=True) + 1e-6
-        )
-        ref_norm: mx.array = self.reference_points / (
-            mx.linalg.norm(self.reference_points, axis=-1, keepdims=True) + 1e-6
-        )
-
-        similarities: mx.array = mx.matmul(embedded_norm, ref_norm.transpose())
-
-        # apply geometric transformation
-        transformed: mx.array = embedded_flat + mx.matmul(
-            similarities, self.strengths[:, None] * self.reference_points
-        )
-
-        # apply importance weighting
-        transformed = self.apply_importance(transformed, seq_len)
-
-        # apply concept-based transformations
-        for concept_name, concept_embedding in self.concept_embeddings.items():
-            concept_similarity: mx.array = mx.matmul(embedded_norm, concept_embedding)
-            transformed = (
-                transformed + concept_similarity.reshape(-1, 1) * concept_embedding
-            )
-
-        return transformed.reshape(batch_size, seq_len, hidden_size)
-
-    def as_linear(self, x: mx.array) -> mx.array:
-        return self.original_embed.as_linear(x)
-
 
 class ConceptLens:
     """Defines a transformation lens based on concept relationships"""
@@ -279,24 +298,6 @@ class ConceptLens:
                 # Create a weighted combination
                 combined: mx.array = (e1 + weight * e2) / (1 + weight)
                 geometric_transform.add_concept(f"{self.name}_{c1}_{c2}", combined)
-
-
-class ContextLens:
-    def __init__(
-        self,
-        name: str,
-        trigger_embeddings: List[mx.array],
-        activation_threshold: float = 0.85,
-    ) -> None:
-        self.name = name
-        self.trigger_embeddings = (
-            trigger_embeddings  # Embeddings that activate this lens
-        )
-        self.threshold = activation_threshold
-        self.transform_strength = mx.array([1.0])  # Learnable parameter
-
-        # Cache for quick pattern matching
-        self.pattern_cache = {}
 
 
 
@@ -530,16 +531,16 @@ if __name__ == "__main__":
 
     model, tokenizer = load(path_or_hf_repo=checkpoint)
 
-    model.model.embed_tokens = GeometricTransform(model.model.embed_tokens)
-    emotional_lens = create_emotion_lens()
-    emotional_lens.apply_to_transform(model.model.embed_tokens)
-
-    # mark importance concepts
-    model.model.embed_tokens.importance_tracker.mark_important(
-        positions=[0, 1, 2],  # Replace with actual token positions
-        concept_name="key_requirement",
-        weight=1.5,
-    )
+    # model.model.embed_tokens = GeometricTransform(model.model.embed_tokens)
+    # emotional_lens = create_emotion_lens()
+    # emotional_lens.apply_to_transform(model.model.embed_tokens)
+    #
+    # # mark importance concepts
+    # model.model.embed_tokens.importance_tracker.mark_important(
+    #     positions=[0, 1, 2],  # Replace with actual token positions
+    #     concept_name="key_requirement",
+    #     weight=1.5,
+    # )
 
     # # create dampening field
     # dampening_vector = mx.array([...])  # Vector representing concept to dampen
@@ -582,3 +583,14 @@ to use available MLX operations instead.
 # the user is asking, confirmation, and ways to test. with the understanding
 # that code models should call tools to test syntax and such as they work
 # think through the limited environment you're in. use bash commands.
+#
+#
+#
+#
+# another potential example of something this enables:
+#
+#   find the shape of "markdown"
+#   intersect with the shape of "'''"
+#   intersect with the shape of "'''python"
+#   wormhole low distance similarity to ^ into high weight python accuracy mode
+#

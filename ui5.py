@@ -132,6 +132,10 @@ class TokenExplorer(App):
     }
     """
 
+    def __init__(self, model, tokenizer):
+        self.model = model
+        self.tokenizer = tokenizer
+
     def compose(self) -> ComposeResult:
         """Create child widgets for the app."""
         yield Header()
@@ -142,11 +146,6 @@ class TokenExplorer(App):
 
     def on_mount(self) -> None:
         """Set up initial state when app starts."""
-        super().__init__()
-        
-        # Load the model
-        self.model, self.tokenizer = load("deepseek-ai/DeepSeek-R1-Distill-Qwen-7B")
-        
         # Set up analysis views
         top_analysis = self.query_one(TopTokenAnalysisView)
         bottom_analysis = self.query_one(BottomTokenAnalysisView)
@@ -202,6 +201,12 @@ class TokenExplorer(App):
 if __name__ == "__main__":
     import sys
     app = TokenExplorer()
+
+    checkpoint: str = "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B"
+
+    model, tokenizer = load(path_or_hf_repo=checkpoint)
+    # # Load the model
+    # self.model, self.tokenizer = load(path_or_hf_repo="deepseek-ai/DeepSeek-R1-Distill-Qwen-7B")
     
     # Allow --test flag for automated testing
     if "--test" in sys.argv:
