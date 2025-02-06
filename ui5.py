@@ -106,9 +106,13 @@ class TokenExplorer(App):
 
     def on_text_area_changed(self, event: TextArea.Changed) -> None:
         """Handle text changes"""
+        # Get the TextArea widget and its current content
+        text_area = self.query_one(TextArea)
+        current_text = text_area.text
+        
         # Mock tokenization - in practice, use your MLX tokenizer
         tokens = [(word, hash(word) % 10000) 
-                 for word in event.text.split()]
+                 for word in current_text.split()]
         
         analysis = self.query_one(TokenAnalysisView)
         analysis.update_current_tokens(tokens)
@@ -121,8 +125,17 @@ if __name__ == "__main__":
     if "--test" in sys.argv:
         # Run test code here
         print("Running in test mode")
-        # Example test: Create app and verify initial state
+        
+        # Create test app
         test_app = TokenExplorer()
-        # Add test assertions here
+        
+        # Debug event properties
+        text_area = test_app.query_one(TextArea)
+        text_area.text = "Test input"
+        
+        # Print available attributes
+        test_event = TextArea.Changed(text_area)
+        print("\nAvailable event attributes:")
+        print(dir(test_event))
     else:
         app.run()
