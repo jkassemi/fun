@@ -118,8 +118,15 @@ class TokenExplorer(App):
     
     TextArea {
         height: 1fr;
+        width: 85%;
         border: solid green;
         margin: 1;
+    }
+
+    #inactivity-progress {
+        width: 15%;
+        margin: 1;
+        align-self: center;
     }
     
     TopTokenAnalysisView, BottomTokenAnalysisView {
@@ -143,8 +150,9 @@ class TokenExplorer(App):
     def compose(self) -> ComposeResult:
         """Create child widgets for the app."""
         yield Header()
-        yield TextArea()
-        yield ProgressBar(total=100, show_percentage=True)
+        with Horizontal():
+            yield TextArea()
+            yield ProgressBar(total=100, show_percentage=True, id="inactivity-progress")
         yield TopTokenAnalysisView()
         yield BottomTokenAnalysisView()
         yield Footer()
