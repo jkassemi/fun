@@ -61,7 +61,7 @@ class BottomTokenAnalysisView(Static):
         if predictions is None:
             predictions = [[("", 0.0)] * 5] * len(tokens)  # Default empty predictions
             
-        table = self.query_one("#token-table", DataTable)
+        table = self.query_one("#top-token-table", DataTable)
         table.clear()
         
         for pos, ((token, token_id), token_predictions) in enumerate(zip(tokens, predictions)):
@@ -119,28 +119,33 @@ class TokenExplorer(App):
         # Set up mock data
         top_analysis = self.query_one(TopTokenAnalysisView)
         bottom_analysis = self.query_one(BottomTokenAnalysisView)
-        # Mock data with predictions for each token
-        mock_predictions = [
-            [("is", 0.25), ("was", 0.15), ("and", 0.10), ("has", 0.08), ("will", 0.05)],
-            [("brown", 0.20), ("red", 0.15), ("lazy", 0.10), ("small", 0.08), ("big", 0.05)],
-            [("fox", 0.30), ("dog", 0.20), ("cat", 0.15), ("bear", 0.10), ("wolf", 0.05)],
-            [("jumps", 0.25), ("runs", 0.15), ("leaps", 0.10), ("walks", 0.08), ("sits", 0.05)]
+        
+        # Sample tokens
+        tokens = [
+            ("The", 464),
+            ("quick", 4789),
+            ("brown", 7891),
+            ("fox", 2345)
         ]
         
-        # top_analysis.update_current_tokens([
-        #     ("The", 464),
-        #     ("quick", 4789),
-        #     ("brown", 7891),
-        #     ("fox", 2345)
-        # ], predictions=mock_predictions)
+        # Mock top predictions
+        top_predictions = [
+            [("is", 0.95), ("was", 0.85), ("and", 0.80), ("has", 0.78), ("will", 0.75)],
+            [("brown", 0.90), ("red", 0.85), ("lazy", 0.80), ("small", 0.78), ("big", 0.75)],
+            [("fox", 0.90), ("dog", 0.80), ("cat", 0.75), ("bear", 0.70), ("wolf", 0.65)],
+            [("jumps", 0.85), ("runs", 0.75), ("leaps", 0.70), ("walks", 0.68), ("sits", 0.65)]
+        ]
         
-        # analysis.update_predictions([
-        #     ("jumps", 0.25, np.random.rand(768)),
-        #     ("runs", 0.15, np.random.rand(768)),
-        #     ("leaps", 0.10, np.random.rand(768)),
-        #     ("walks", 0.08, np.random.rand(768)),
-        #     ("sits", 0.05, np.random.rand(768)),
-        # ])
+        # Mock bottom predictions
+        bottom_predictions = [
+            [("xyz", 0.05), ("123", 0.04), ("@#$", 0.03), ("...", 0.02), ("???", 0.01)],
+            [("9876", 0.06), ("qwer", 0.05), ("asdf", 0.04), ("zxcv", 0.03), ("jklm", 0.02)],
+            [("!!!!", 0.04), ("****", 0.03), ("____", 0.02), ("^^^^", 0.01), (">>>>", 0.005)],
+            [("0000", 0.03), ("1111", 0.02), ("2222", 0.01), ("3333", 0.005), ("4444", 0.001)]
+        ]
+        
+        top_analysis.update_current_tokens(tokens, predictions=top_predictions)
+        bottom_analysis.update_current_tokens(tokens, predictions=bottom_predictions)
 
     def on_text_area_changed(self, event: TextArea.Changed) -> None:
         """Handle text changes"""
