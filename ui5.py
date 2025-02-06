@@ -176,11 +176,19 @@ class TokenExplorer(App):
         """Handle button presses"""
         log = self.query_one(Log)
         if event.button.id == "load-model":
-            log.write_line("Loading model...")
-            checkpoint = "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B"
-            self.model, self.tokenizer = load(path_or_hf_repo=checkpoint)
-            log.write_line("Model loaded!")
-            self.query_one("#generate").disabled = False
+            try:
+                log.write_line("Starting model load...")
+                # Run model loading in sync context
+                import asyncio
+                loop = asyncio.get_event_loop()
+                checkpoint = "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B"
+                self.model, self.tokenizer = await loop.run_in_executor(
+                    None, lambda: load(path_or_hf_repo=checkpoint)
+                )
+                log.write_line("Model loaded successfully!")
+                self.query_one("#generate").disabled = False
+            except Exception as e:
+                log.write_line(f"Error loading model: {type(e).__name__}: {str(e)}")
             
         elif event.button.id == "generate":
             if self.model and self.tokenizer:
