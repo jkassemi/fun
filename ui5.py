@@ -202,3 +202,15 @@ if __name__ == "__main__":
             print(f"\nError finding TextArea: {type(e).__name__}: {str(e)}")
     else:
         app.run()
+
+
+# ideas when training:
+#
+# 1. you could probably find xml tags to define how to perceive the associated content useful. 
+#           def <1>my_function</1>:
+#               pass
+#
+#    think of this like an extension of the `ai?`, 'ai', 'ai!' marking concept. leads to more
+#    effective context discovery.
+#
+# 2. 
