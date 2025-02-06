@@ -113,13 +113,13 @@ class TokenExplorer(App):
             ("fox", 2345)
         ], predictions=mock_predictions)
         
-        analysis.update_predictions([
-            ("jumps", 0.25, np.random.rand(768)),
-            ("runs", 0.15, np.random.rand(768)),
-            ("leaps", 0.10, np.random.rand(768)),
-            ("walks", 0.08, np.random.rand(768)),
-            ("sits", 0.05, np.random.rand(768)),
-        ])
+        # analysis.update_predictions([
+        #     ("jumps", 0.25, np.random.rand(768)),
+        #     ("runs", 0.15, np.random.rand(768)),
+        #     ("leaps", 0.10, np.random.rand(768)),
+        #     ("walks", 0.08, np.random.rand(768)),
+        #     ("sits", 0.05, np.random.rand(768)),
+        # ])
 
     def on_text_area_changed(self, event: TextArea.Changed) -> None:
         """Handle text changes"""
