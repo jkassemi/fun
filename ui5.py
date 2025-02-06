@@ -108,7 +108,7 @@ class TokenExplorer(App):
         """Handle text changes"""
         # Mock tokenization - in practice, use your MLX tokenizer
         tokens = [(word, hash(word) % 10000) 
-                 for word in event.value.split()]
+                 for word in event.text.split()]
         
         analysis = self.query_one(TokenAnalysisView)
         analysis.update_current_tokens(tokens)
