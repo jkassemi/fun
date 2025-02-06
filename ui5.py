@@ -365,20 +365,26 @@ class TokenExplorer(App):
             log = self.query_one(Log)
             log.write_line(f"token_ids shape: {mx.array([token_ids]).shape}")
 
-            # Get model predictions and log shapes
+            # Get model predictions for next token
             model_output = self.model(mx.array([token_ids]))
             log.write_line(f"model_output shape: {model_output.shape}")
 
-            logits = model_output[-1]  # Get last layer logits
-            log.write_line(f"logits shape: {logits.shape}")
+            # Get logits for last position only
+            last_position_logits = model_output[-1, -1]  # Last layer, last position
+            log.write_line(f"last position logits shape: {last_position_logits.shape}")
 
-            # don't forget to keep some stats on the distribution of this
-            probs = mx.softmax(logits, axis=-1)
-            log.write_line(f"probs shape: {probs.shape}")
+            # Get probabilities for next token
+            next_token_probs = mx.softmax(last_position_logits, axis=-1)
+            log.write_line(f"next token probs shape: {next_token_probs.shape}")
 
-            # Get top 5 predictions for each position
+            # Get top 5 predictions for next token
             predictions = []
-            for pos_probs in probs[0]:  # First batch item
+            # Get indices of top 5 probabilities
+            top_indices = mx.argmax(next_token_probs, axis=-1)[:5]
+            # Convert to (token, prob) pairs
+            next_token_preds = [(self.tokenizer.decode([idx]), float(next_token_probs[idx])) 
+                               for idx in top_indices]
+            predictions = [next_token_preds]  # Single position predictions
                 # Get indices of top 5 probabilities
                 top_indices = mx.argmax(pos_probs, axis=-1)[:5]
                 # Convert to (token, prob) pairs
