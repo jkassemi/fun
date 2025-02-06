@@ -12,6 +12,12 @@ Only show code when:
 
 Remember: Quality of insight > Quantity of code
 
+TASK MANAGEMENT:
+- Check TODO.md before suggesting changes
+- Update TODOs after each significant change
+- Focus on one task at a time
+- Keep track of the context stack
+
 LEARNING PROCESS:
 
 1. Track the context stack
