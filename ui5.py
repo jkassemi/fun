@@ -5,6 +5,7 @@ Visualize and manipulate embedding spaces and attention patterns.
 
 import mlx.core as mx
 from mlx_lm import load, generate
+import asyncio
 from textual.app import App, ComposeResult
 from textual.containers import Horizontal, Vertical
 from textual.widgets import Header, Footer, Static, DataTable, TextArea
@@ -136,6 +137,7 @@ class TokenExplorer(App):
         super().__init__()
         self.model = model
         self.tokenizer = tokenizer
+        self._inactivity_timer = None
 
     def compose(self) -> ComposeResult:
         """Create child widgets for the app."""
@@ -176,11 +178,23 @@ class TokenExplorer(App):
         top_analysis.update_current_tokens(tokens, predictions=top_predictions)
         bottom_analysis.update_current_tokens(tokens, predictions=bottom_predictions)
 
-    def on_text_area_changed(self, event: TextArea.Changed) -> None:
+    async def on_text_area_changed(self, event: TextArea.Changed) -> None:
         """Handle text changes"""
+        # Cancel existing timer if any
+        if self._inactivity_timer:
+            self._inactivity_timer.cancel()
+            
+        # Create new timer
+        self._inactivity_timer = asyncio.create_task(self._handle_inactivity())
+        
         # Get the TextArea widget and its current content
         text_area = self.query_one(TextArea)
         current_text = text_area.text
+        
+    async def _handle_inactivity(self) -> None:
+        """Called when text area has been inactive for 3 seconds"""
+        await asyncio.sleep(3.0)
+        print("Text area inactive for 3 seconds")
         
         # Mock tokenization - in practice, use your MLX tokenizer
         tokens = [(word, hash(word) % 10000) 
