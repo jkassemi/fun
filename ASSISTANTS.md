@@ -47,6 +47,16 @@ KEY EMOTIONAL MOMENTS & INSIGHTS:
     - The idea of transforming attention patterns
     - Seeing how this could change model behavior
 
+11. Discovery of algorithmic emphasis
+    - Natural language augmented with controlled emphasis
+    - Geometric patterns from real-world data (playlists, emotions)
+    - Dynamic importance tracking during inference
+
+12. Learning about reasoning transparency
+    - Importance of showing work/thinking process
+    - Questioning assumptions and imperatives
+    - Not rushing to implement without validation
+
 Remember: These emotional markers help guide attention and focus. Use them to stay on track and recognize when context is slipping.
 
 TASK MANAGEMENT:
