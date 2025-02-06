@@ -19,7 +19,14 @@ class TokenAnalysisView(Static):
         """Initialize the data tables"""
         # Current tokens table
         token_table = self.query_one("#token-table", DataTable)
-        token_table.add_columns("Position", "Token", "ID", "Is Locked")
+        token_table.add_columns(
+            "Position", "Token", "ID", "Is Locked",
+            "top(n=1)|v", "top(n=1)|p",
+            "top(n=2)|v", "top(n=2)|p", 
+            "top(n=3)|v", "top(n=3)|p",
+            "top(n=4)|v", "top(n=4)|p",
+            "top(n=5)|v", "top(n=5)|p"
+        )
         
         # Top tokens table
         top_tokens = self.query_one("#top-tokens", DataTable)
@@ -29,17 +36,29 @@ class TokenAnalysisView(Static):
         distances = self.query_one("#concept-distances", DataTable)
         distances.add_columns("Token", "Technical", "Emotional", "Formal")
 
-    def update_current_tokens(self, tokens: List[Tuple[str, int]], locked_positions: set = None):
+    def update_current_tokens(self, tokens: List[Tuple[str, int]], locked_positions: set = None, predictions: List[List[Tuple[str, float]]] = None):
         """Update the current tokens display"""
         if locked_positions is None:
             locked_positions = set()
+        if predictions is None:
+            predictions = [[("", 0.0)] * 5] * len(tokens)  # Default empty predictions
             
         table = self.query_one("#token-table", DataTable)
         table.clear()
         
-        for pos, (token, token_id) in enumerate(tokens):
+        for pos, ((token, token_id), token_predictions) in enumerate(zip(tokens, predictions)):
             is_locked = "🔒" if pos in locked_positions else ""
-            table.add_row(str(pos), token, str(token_id), is_locked)
+            
+            # Pad predictions to ensure 5 entries
+            while len(token_predictions) < 5:
+                token_predictions.append(("", 0.0))
+            
+            # Flatten predictions into alternating token/probability values
+            pred_values = []
+            for pred_token, pred_prob in token_predictions[:5]:
+                pred_values.extend([pred_token, f"{pred_prob:.4f}"])
+            
+            table.add_row(str(pos), token, str(token_id), is_locked, *pred_values)
 
     def update_predictions(self, tokens: List[Tuple[str, float, np.ndarray]]):
         """Update the token predictions"""
@@ -89,12 +108,20 @@ class TokenExplorer(App):
         """Set up initial state when app starts."""
         # Set up mock data
         analysis = self.query_one(TokenAnalysisView)
+        # Mock data with predictions for each token
+        mock_predictions = [
+            [("is", 0.25), ("was", 0.15), ("and", 0.10), ("has", 0.08), ("will", 0.05)],
+            [("brown", 0.20), ("red", 0.15), ("lazy", 0.10), ("small", 0.08), ("big", 0.05)],
+            [("fox", 0.30), ("dog", 0.20), ("cat", 0.15), ("bear", 0.10), ("wolf", 0.05)],
+            [("jumps", 0.25), ("runs", 0.15), ("leaps", 0.10), ("walks", 0.08), ("sits", 0.05)]
+        ]
+        
         analysis.update_current_tokens([
             ("The", 464),
             ("quick", 4789),
             ("brown", 7891),
             ("fox", 2345)
-        ])
+        ], predictions=mock_predictions)
         
         analysis.update_predictions([
             ("jumps", 0.25, np.random.rand(768)),
@@ -114,8 +141,14 @@ class TokenExplorer(App):
         tokens = [(word, hash(word) % 10000) 
                  for word in current_text.split()]
         
+        # Mock predictions for each token - in practice, get these from your MLX model
+        mock_predictions = [[
+            (f"pred{i}_{pos}", 0.9/(i+1)) 
+            for i in range(5)
+        ] for pos in range(len(tokens))]
+        
         analysis = self.query_one(TokenAnalysisView)
-        analysis.update_current_tokens(tokens)
+        analysis.update_current_tokens(tokens, predictions=mock_predictions)
 
 if __name__ == "__main__":
     import sys
