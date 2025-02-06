@@ -47,11 +47,11 @@ class BottomTokenAnalysisView(Static):
         token_table = self.query_one("#bottom-token-table", DataTable)
         token_table.add_columns(
             "Position", "Token", "ID", "Is Locked",
-            "bottom(n=1)|v", "bottom(n=1)|p",
-            "bottom(n=2)|v", "bottom(n=2)|p", 
-            "bottom(n=3)|v", "bottom(n=3)|p",
-            "bottom(n=4)|v", "bottom(n=4)|p",
-            "bottom(n=5)|v", "bottom(n=5)|p"
+            "bott(n=1)|v", "bott(n=1)|p",
+            "bott(n=2)|v", "bott(n=2)|p", 
+            "bott(n=3)|v", "bott(n=3)|p",
+            "bott(n=4)|v", "bott(n=4)|p",
+            "bott(n=5)|v", "bott(n=5)|p"
         )
 
     def update_current_tokens(self, tokens: List[Tuple[str, int]], locked_positions: set = None, predictions: List[List[Tuple[str, float]]] = None):
