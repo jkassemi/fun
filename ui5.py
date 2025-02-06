@@ -61,7 +61,7 @@ class BottomTokenAnalysisView(Static):
         if predictions is None:
             predictions = [[("", 0.0)] * 5] * len(tokens)  # Default empty predictions
             
-        table = self.query_one("#top-token-table", DataTable)
+        table = self.query_one("#bottom-token-table", DataTable)
         table.clear()
         
         for pos, ((token, token_id), token_predictions) in enumerate(zip(tokens, predictions)):
