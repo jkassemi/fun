@@ -8,107 +8,154 @@ from mlx_lm import load, generate
 import asyncio
 from textual.app import App, ComposeResult
 from textual.containers import Horizontal, Vertical
-from textual.widgets import Header, Footer, Static, DataTable, TextArea, ProgressBar, Log, Button
+from textual.widgets import (
+    Header,
+    Footer,
+    Static,
+    DataTable,
+    TextArea,
+    ProgressBar,
+    Log,
+    Button,
+)
 from textual import events
 import numpy as np
 from typing import List, Dict, Tuple
 
+
 class TopTokenAnalysisView(Static):
     """Shows top token predictions"""
-    
+
     def compose(self) -> ComposeResult:
         """Create tables for token analysis"""
         yield Static("Top Predictions", classes="table-header")
         yield DataTable(id="top-token-table")
-    
+
     def on_mount(self) -> None:
         """Initialize the data tables"""
         token_table = self.query_one("#top-token-table", DataTable)
         token_table.add_columns(
-            "Position", "prev(n=1)|p", "Token", "ID", "Is Locked",
-            "top(n=1)|v", "top(n=1)|p",
-            "top(n=2)|v", "top(n=2)|p", 
-            "top(n=3)|v", "top(n=3)|p",
-            "top(n=4)|v", "top(n=4)|p",
-            "top(n=5)|v", "top(n=5)|p"
+            "Position",
+            "prev(n=1)|p",
+            "Token",
+            "ID",
+            "Is Locked",
+            "top(n=1)|v",
+            "top(n=1)|p",
+            "top(n=2)|v",
+            "top(n=2)|p",
+            "top(n=3)|v",
+            "top(n=3)|p",
+            "top(n=4)|v",
+            "top(n=4)|p",
+            "top(n=5)|v",
+            "top(n=5)|p",
         )
 
-    def update_current_tokens(self, tokens: List[Tuple[str, int]], locked_positions: set = None, predictions: List[List[Tuple[str, float]]] = None):
+    def update_current_tokens(
+        self,
+        tokens: List[Tuple[str, int]],
+        locked_positions: set = None,
+        predictions: List[List[Tuple[str, float]]] = None,
+    ):
         """Update the current tokens display"""
         if locked_positions is None:
             locked_positions = set()
         if predictions is None:
             predictions = [[("", 0.0)] * 5] * len(tokens)  # Default empty predictions
-            
+
         table = self.query_one("#top-token-table", DataTable)
         table.clear()
-        
-        for pos, ((token, token_id), token_predictions) in enumerate(zip(tokens, predictions)):
+
+        for pos, ((token, token_id), token_predictions) in enumerate(
+            zip(tokens, predictions)
+        ):
             is_locked = "🔒" if pos in locked_positions else ""
-            
+
             # Pad predictions to ensure 5 entries
             while len(token_predictions) < 5:
                 token_predictions.append(("", 0.0))
-            
+
             # Flatten predictions into alternating token/probability values
             pred_values = []
             for pred_token, pred_prob in token_predictions[:5]:
                 pred_values.extend([pred_token, f"{pred_prob:.4f}"])
-            
+
             # Calculate prev token probability (mock for now)
             prev_prob = "0.00" if pos == 0 else "0.85"
-            table.add_row(str(pos), prev_prob, token, str(token_id), is_locked, *pred_values)
+            table.add_row(
+                str(pos), prev_prob, token, str(token_id), is_locked, *pred_values
+            )
+
 
 class BottomTokenAnalysisView(Static):
     """Shows bottom token predictions"""
-    
+
     def compose(self) -> ComposeResult:
         """Create tables for token analysis"""
         yield Static("Bottom Predictions", classes="table-header")
         yield DataTable(id="bottom-token-table")
-    
+
     def on_mount(self) -> None:
         """Initialize the data tables"""
         token_table = self.query_one("#bottom-token-table", DataTable)
         token_table.add_columns(
-            "Position", "prev(n=1)|p", "Token", "ID", "Is Locked",
-            "bott(n=1)|v", "bott(n=1)|p",
-            "bott(n=2)|v", "bott(n=2)|p", 
-            "bott(n=3)|v", "bott(n=3)|p",
-            "bott(n=4)|v", "bott(n=4)|p",
-            "bott(n=5)|v", "bott(n=5)|p"
+            "Position",
+            "prev(n=1)|p",
+            "Token",
+            "ID",
+            "Is Locked",
+            "bott(n=1)|v",
+            "bott(n=1)|p",
+            "bott(n=2)|v",
+            "bott(n=2)|p",
+            "bott(n=3)|v",
+            "bott(n=3)|p",
+            "bott(n=4)|v",
+            "bott(n=4)|p",
+            "bott(n=5)|v",
+            "bott(n=5)|p",
         )
 
-    def update_current_tokens(self, tokens: List[Tuple[str, int]], locked_positions: set = None, predictions: List[List[Tuple[str, float]]] = None):
+    def update_current_tokens(
+        self,
+        tokens: List[Tuple[str, int]],
+        locked_positions: set = None,
+        predictions: List[List[Tuple[str, float]]] = None,
+    ):
         """Update the current tokens display"""
         if locked_positions is None:
             locked_positions = set()
         if predictions is None:
             predictions = [[("", 0.0)] * 5] * len(tokens)  # Default empty predictions
-            
+
         table = self.query_one("#bottom-token-table", DataTable)
         table.clear()
-        
-        for pos, ((token, token_id), token_predictions) in enumerate(zip(tokens, predictions)):
+
+        for pos, ((token, token_id), token_predictions) in enumerate(
+            zip(tokens, predictions)
+        ):
             is_locked = "🔒" if pos in locked_positions else ""
-            
+
             # Pad predictions to ensure 5 entries
             while len(token_predictions) < 5:
                 token_predictions.append(("", 0.0))
-            
+
             # Flatten predictions into alternating token/probability values
             pred_values = []
             for pred_token, pred_prob in token_predictions[:5]:
                 pred_values.extend([pred_token, f"{pred_prob:.4f}"])
-            
+
             # Calculate prev token probability (mock for now)
             prev_prob = "0.00" if pos == 0 else "0.85"
-            table.add_row(str(pos), prev_prob, token, str(token_id), is_locked, *pred_values)
+            table.add_row(
+                str(pos), prev_prob, token, str(token_id), is_locked, *pred_values
+            )
 
 
 class TokenExplorer(App):
     """Interactive token exploration interface"""
-    
+
     BINDINGS = [
         ("ctrl+r", "reload_app", "Reload"),
     ]
@@ -170,7 +217,9 @@ class TokenExplorer(App):
         with Horizontal(id="horizontal"):
             yield Button("Load Model", id="load-model")
             yield Button("Generate", id="generate", disabled=True)
-            yield ProgressBar(total=100, show_percentage=False, id="inactivity-progress")
+            yield ProgressBar(
+                total=100, show_percentage=False, id="inactivity-progress"
+            )
         yield TextArea()
         yield TopTokenAnalysisView()
         yield BottomTokenAnalysisView()
@@ -186,10 +235,13 @@ class TokenExplorer(App):
                 log.write_line(f"Button handler environment:")
                 log.write_line(f"HF_TOKEN: {os.environ.get('HF_TOKEN')}")
                 log.write_line(f"PWD: {os.environ.get('PWD')}")
-                
+
                 # Run model loading in executor to keep UI responsive
                 checkpoint = "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B"
-                self.model, self.tokenizer = await asyncio.get_event_loop().run_in_executor(
+                (
+                    self.model,
+                    self.tokenizer,
+                ) = await asyncio.get_event_loop().run_in_executor(
                     None, lambda: load(path_or_hf_repo=checkpoint)
                 )
                 log.write_line("Model loaded successfully!")
@@ -199,7 +251,7 @@ class TokenExplorer(App):
             except Exception as e:
                 log.write_line(f"Error loading model: {type(e).__name__}: {str(e)}")
                 log.write_line(f"Error details: {str(e)}")
-            
+
         elif event.button.id == "generate":
             if self.model and self.tokenizer:
                 text_area = self.query_one(TextArea)
@@ -220,28 +272,37 @@ class TokenExplorer(App):
         top_analysis = self.query_one(TopTokenAnalysisView)
         bottom_analysis = self.query_one(BottomTokenAnalysisView)
         text_area = self.query_one(TextArea)
-        
+
         # Set initial text
         text_area.text = "The quick"
-        
+
         # Sample tokens - just the ones from our text
-        tokens = [
-            ("The", 464),
-            ("quick", 4789)
-        ]
-        
+        tokens = [("The", 464), ("quick", 4789)]
+
         # Mock top predictions for just our two tokens
         top_predictions = [
             [("is", 0.95), ("was", 0.85), ("and", 0.80), ("has", 0.78), ("will", 0.75)],
-            [("brown", 0.90), ("red", 0.85), ("lazy", 0.80), ("small", 0.78), ("big", 0.75)]
+            [
+                ("brown", 0.90),
+                ("red", 0.85),
+                ("lazy", 0.80),
+                ("small", 0.78),
+                ("big", 0.75),
+            ],
         ]
-        
+
         # Mock bottom predictions for just our two tokens
         bottom_predictions = [
             [("xyz", 0.05), ("123", 0.04), ("@#$", 0.03), ("...", 0.02), ("???", 0.01)],
-            [("9876", 0.06), ("qwer", 0.05), ("asdf", 0.04), ("zxcv", 0.03), ("jklm", 0.02)]
+            [
+                ("9876", 0.06),
+                ("qwer", 0.05),
+                ("asdf", 0.04),
+                ("zxcv", 0.03),
+                ("jklm", 0.02),
+            ],
         ]
-        
+
         top_analysis.update_current_tokens(tokens, predictions=top_predictions)
         bottom_analysis.update_current_tokens(tokens, predictions=bottom_predictions)
 
@@ -252,71 +313,74 @@ class TokenExplorer(App):
             self._inactivity_timer.cancel()
         if self._progress_timer:
             self._progress_timer.cancel()
-            
+
         # Reset progress bar
         progress = self.query_one(ProgressBar)
         progress.update(progress=0)
-            
+
         # Create new timers
         self._inactivity_timer = asyncio.create_task(self._handle_inactivity())
         self._progress_timer = asyncio.create_task(self._update_progress())
-        
+
         # Get the TextArea widget and its current content
         text_area = self.query_one(TextArea)
         current_text = text_area.text
-        
+
     async def _update_progress(self) -> None:
         """Update progress bar during inactivity period"""
         progress = self.query_one(ProgressBar)
         for i in range(30):  # 30 steps over 3 seconds
             await asyncio.sleep(0.1)  # 100ms per step
-            progress.update(progress=((i+1) * 100) // 30)
-            
+            progress.update(progress=((i + 1) * 100) // 30)
+
     async def _handle_inactivity(self) -> None:
         """Called when text area has been inactive for 3 seconds"""
         await asyncio.sleep(3.0)
         progress = self.query_one(ProgressBar)
         progress.update(progress=100)
-        
+
         # Get current text
         text_area = self.query_one(TextArea)
         current_text = text_area.text
-        
+
         # Tokenize with MLX tokenizer
         token_ids = self.tokenizer.encode(current_text)
         tokens = [(self.tokenizer.decode([tid]), tid) for tid in token_ids]
-        
+
         # Get model predictions
         logits = self.model(mx.array([token_ids]))[-1]  # Get last layer logits
 
         # don't forget to keep some stats on the distribution of this
         probs = mx.softmax(logits, axis=-1)
-        
+
         # Get top 5 predictions for each position
         predictions = []
         for pos_probs in probs[0]:  # First batch item
             # Get indices of top 5 probabilities
             top_indices = mx.argmax(pos_probs, axis=-1)[:5]
             # Convert to (token, prob) pairs
-            pos_preds = [(self.tokenizer.decode([idx]), float(pos_probs[idx])) 
-                        for idx in top_indices]
+            pos_preds = [
+                (self.tokenizer.decode([idx]), float(pos_probs[idx]))
+                for idx in top_indices
+            ]
             predictions.append(pos_preds)
-        
+
         top_analysis = self.query_one(TopTokenAnalysisView)
         bottom_analysis = self.query_one(BottomTokenAnalysisView)
-        
+
         # Update views with real predictions
         top_analysis.update_current_tokens(tokens, predictions=predictions)
         bottom_analysis.update_current_tokens(tokens, predictions=predictions)
 
+
 if __name__ == "__main__":
     import sys
     import os
-    
+
     print("\nMain process environment:")
-    print("HF_TOKEN:", os.environ.get('HF_TOKEN'))
-    print("PWD:", os.environ.get('PWD'))
-    
+    print("HF_TOKEN:", os.environ.get("HF_TOKEN"))
+    print("PWD:", os.environ.get("PWD"))
+
     print("\nTrying model load in main process...")
     try:
         model, tokenizer = load("deepseek-ai/DeepSeek-R1-Distill-Qwen-7B")
@@ -325,30 +389,30 @@ if __name__ == "__main__":
         print("Tokenizer info:", tokenizer.__class__.__name__)
     except Exception as e:
         print("Main process model load failed:", str(e))
-    
+
     app = TokenExplorer()
-    
+
     # Allow --test flag for automated testing
     if "--test" in sys.argv:
         print("Running in test mode")
-        
+
         # Create test app and debug widget tree
         test_app = TokenExplorer()
         print("\nApp created")
-        
+
         # Try composing
         widgets = test_app.compose()
         print("\nCompose returned:", list(widgets))
-        
+
         # Debug widget tree
         print("\nWidget tree before mount:")
         print(test_app.tree)
-        
+
         # Try mounting
         test_app.post_message(events.Mount())
         print("\nWidget tree after mount:")
         print(test_app.tree)
-        
+
         # Debug query
         try:
             text_area = test_app.query_one(TextArea)
@@ -361,11 +425,11 @@ if __name__ == "__main__":
 
 # ideas when training:
 #
-# 1. you could probably find xml tags to define how to perceive the associated content useful. 
+# 1. you could probably find xml tags to define how to perceive the associated content useful.
 #           def <1>my_function</1>:
 #               pass
 #
 #    think of this like an extension of the `ai?`, 'ai', 'ai!' marking concept. leads to more
 #    effective context discovery.
 #
-# 2. 
+# 2.
