@@ -8,7 +8,7 @@ from mlx_lm import load, generate
 import asyncio
 from textual.app import App, ComposeResult
 from textual.containers import Horizontal, Vertical
-from textual.widgets import Header, Footer, Static, DataTable, TextArea, ProgressBar
+from textual.widgets import Header, Footer, Static, DataTable, TextArea, ProgressBar, Log
 from textual import events
 import numpy as np
 from typing import List, Dict, Tuple
@@ -137,6 +137,12 @@ class TokenExplorer(App):
         height: 1fr;
         margin: 1;
     }
+    
+    Log {
+        height: 5;
+        border: solid red;
+        margin: 1;
+    }
     """
 
     def __init__(self, model, tokenizer):
@@ -153,6 +159,7 @@ class TokenExplorer(App):
         yield TextArea()
         yield TopTokenAnalysisView()
         yield BottomTokenAnalysisView()
+        yield Log()
         yield Footer()
 
     def on_mount(self) -> None:
