@@ -127,12 +127,12 @@ class TokenExplorer(App):
             [("jumps", 0.25), ("runs", 0.15), ("leaps", 0.10), ("walks", 0.08), ("sits", 0.05)]
         ]
         
-        analysis.update_current_tokens([
-            ("The", 464),
-            ("quick", 4789),
-            ("brown", 7891),
-            ("fox", 2345)
-        ], predictions=mock_predictions)
+        # top_analysis.update_current_tokens([
+        #     ("The", 464),
+        #     ("quick", 4789),
+        #     ("brown", 7891),
+        #     ("fox", 2345)
+        # ], predictions=mock_predictions)
         
         # analysis.update_predictions([
         #     ("jumps", 0.25, np.random.rand(768)),
