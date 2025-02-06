@@ -64,6 +64,12 @@ class TopTokenAnalysisView(Static):
         if predictions is None:
             predictions = [[("", 0.0)] * 5] * len(tokens)  # Default empty predictions
 
+        try:
+            log = self.query_one(Log)
+            log.write_line("Top table starting token update")
+        except:
+            pass
+
         table = self.query_one("#top-token-table", DataTable)
         table.clear()
 
@@ -128,6 +134,12 @@ class BottomTokenAnalysisView(Static):
             locked_positions = set()
         if predictions is None:
             predictions = [[("", 0.0)] * 5] * len(tokens)  # Default empty predictions
+
+        try:
+            log = self.query_one(Log)
+            log.write_line("Bottom table starting token update")
+        except:
+            pass
 
         table = self.query_one("#bottom-token-table", DataTable)
         table.clear()
@@ -336,41 +348,49 @@ class TokenExplorer(App):
     async def _handle_inactivity(self) -> None:
         """Called when text area has been inactive for 3 seconds"""
         await asyncio.sleep(3.0)
-        progress = self.query_one(ProgressBar)
-        progress.update(progress=100)
 
-        # Get current text
-        text_area = self.query_one(TextArea)
-        current_text = text_area.text
+        try:
+            progress = self.query_one(ProgressBar)
+            progress.update(progress=100)
 
-        # Tokenize with MLX tokenizer
-        token_ids = self.tokenizer.encode(current_text)
-        tokens = [(self.tokenizer.decode([tid]), tid) for tid in token_ids]
+            # Get current text
+            text_area = self.query_one(TextArea)
+            current_text = text_area.text
 
-        # Get model predictions
-        logits = self.model(mx.array([token_ids]))[-1]  # Get last layer logits
+            # Tokenize with MLX tokenizer
+            token_ids = self.tokenizer.encode(current_text)
+            tokens = [(self.tokenizer.decode([tid]), tid) for tid in token_ids]
 
-        # don't forget to keep some stats on the distribution of this
-        probs = mx.softmax(logits, axis=-1)
+            # Get model predictions
+            logits = self.model(mx.array([token_ids]))[-1]  # Get last layer logits
 
-        # Get top 5 predictions for each position
-        predictions = []
-        for pos_probs in probs[0]:  # First batch item
-            # Get indices of top 5 probabilities
-            top_indices = mx.argmax(pos_probs, axis=-1)[:5]
-            # Convert to (token, prob) pairs
-            pos_preds = [
-                (self.tokenizer.decode([idx]), float(pos_probs[idx]))
-                for idx in top_indices
-            ]
-            predictions.append(pos_preds)
+            # don't forget to keep some stats on the distribution of this
+            probs = mx.softmax(logits, axis=-1)
 
-        top_analysis = self.query_one(TopTokenAnalysisView)
-        bottom_analysis = self.query_one(BottomTokenAnalysisView)
+            # Get top 5 predictions for each position
+            predictions = []
+            for pos_probs in probs[0]:  # First batch item
+                # Get indices of top 5 probabilities
+                top_indices = mx.argmax(pos_probs, axis=-1)[:5]
+                # Convert to (token, prob) pairs
+                pos_preds = [
+                    (self.tokenizer.decode([idx]), float(pos_probs[idx]))
+                    for idx in top_indices
+                ]
+                predictions.append(pos_preds)
 
-        # Update views with real predictions
-        top_analysis.update_current_tokens(tokens, predictions=predictions)
-        bottom_analysis.update_current_tokens(tokens, predictions=predictions)
+            top_analysis = self.query_one(TopTokenAnalysisView)
+            bottom_analysis = self.query_one(BottomTokenAnalysisView)
+
+            # Update views with real predictions
+            top_analysis.update_current_tokens(tokens, predictions=predictions)
+            bottom_analysis.update_current_tokens(tokens, predictions=predictions)
+        except Exception as e:
+            try:
+                log = self.query_one(Log)
+                log.write_line(f"Error: {e}")
+            except:
+                pass
 
 
 if __name__ == "__main__":
