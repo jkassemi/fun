@@ -26,7 +26,7 @@ class TopTokenAnalysisView(Static):
         """Initialize the data tables"""
         token_table = self.query_one("#top-token-table", DataTable)
         token_table.add_columns(
-            "Position", "Token", "ID", "Is Locked",
+            "Position", "prev(n=1)|p", "Token", "ID", "Is Locked",
             "top(n=1)|v", "top(n=1)|p",
             "top(n=2)|v", "top(n=2)|p", 
             "top(n=3)|v", "top(n=3)|p",
@@ -56,7 +56,9 @@ class TopTokenAnalysisView(Static):
             for pred_token, pred_prob in token_predictions[:5]:
                 pred_values.extend([pred_token, f"{pred_prob:.4f}"])
             
-            table.add_row(str(pos), token, str(token_id), is_locked, *pred_values)
+            # Calculate prev token probability (mock for now)
+            prev_prob = "0.00" if pos == 0 else "0.85"
+            table.add_row(str(pos), prev_prob, token, str(token_id), is_locked, *pred_values)
 
 class BottomTokenAnalysisView(Static):
     """Shows bottom token predictions"""
@@ -70,7 +72,7 @@ class BottomTokenAnalysisView(Static):
         """Initialize the data tables"""
         token_table = self.query_one("#bottom-token-table", DataTable)
         token_table.add_columns(
-            "Position", "Token", "ID", "Is Locked",
+            "Position", "prev(n=1)|p", "Token", "ID", "Is Locked",
             "bott(n=1)|v", "bott(n=1)|p",
             "bott(n=2)|v", "bott(n=2)|p", 
             "bott(n=3)|v", "bott(n=3)|p",
