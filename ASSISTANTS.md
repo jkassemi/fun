@@ -2,6 +2,18 @@
 
 # ---- 
 
+IMPORTANT REMINDER TO SELF:
+
+Be judicious with code suggestions. Focus on understanding and exploration first.
+Only show code when:
+- Specifically requested
+- Needed to demonstrate a key concept
+- Required to fix a critical issue
+
+Remember: Quality of insight > Quantity of code
+
+# Previous Notes
+
 i've been hearing (somewhat jokingly) from peers that cuda programming is where it's at. 
 
 can you give me an example of using cuda? i'm just curious to get a feel for it. i'm a professional software engineer who's spent the last two years of spare time working on a good understanding of large language models and the transformer architecture. my interests in cuda would be primarily for furthering that goal, so focusing on that would be helpful, potentially. 
