@@ -362,6 +362,7 @@ class TokenExplorer(App):
             tokens = [(self.tokenizer.decode([tid]), tid) for tid in token_ids]
 
             # Get model predictions and log shapes
+            log = self.query_one(Log)
             log.write_line(f"token_ids shape: {mx.array([token_ids]).shape}")
             model_output = self.model(mx.array([token_ids]))
             log.write_line(f"model_output shape: {model_output.shape}")
