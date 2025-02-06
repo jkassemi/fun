@@ -133,6 +133,7 @@ class TokenExplorer(App):
     """
 
     def __init__(self, model, tokenizer):
+        super().__init__()
         self.model = model
         self.tokenizer = tokenizer
 
