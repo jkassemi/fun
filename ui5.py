@@ -218,7 +218,6 @@ class TokenExplorer(App):
         await asyncio.sleep(3.0)
         progress = self.query_one(ProgressBar)
         progress.update(progress=100)
-        print("Text area inactive for 3 seconds")
         
         # Get current text
         text_area = self.query_one(TextArea)
@@ -230,6 +229,8 @@ class TokenExplorer(App):
         
         # Get model predictions
         logits = self.model(mx.array([token_ids]))[-1]  # Get last layer logits
+
+        # don't forget to keep some stats on the distribution of this
         probs = mx.softmax(logits, axis=-1)
         
         # Get top 5 predictions for each position
