@@ -32,5 +32,9 @@ class GeometricTransform(nn.Module):
         
     def __call__(self, x: mx.array) -> mx.array:
         """Apply geometric transformation to input"""
-        # Start with identity transform
-        return x
+        # Normalize input for cosine similarity
+        x_norm = x / (mx.linalg.norm(x, axis=-1, keepdims=True) + 1e-6)
+        
+        # For now, just return normalized input
+        # This will be our foundation for more complex transformations
+        return x_norm
