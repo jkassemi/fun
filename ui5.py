@@ -385,14 +385,6 @@ class TokenExplorer(App):
             next_token_preds = [(self.tokenizer.decode([idx]), float(next_token_probs[idx])) 
                                for idx in top_indices]
             predictions = [next_token_preds]  # Single position predictions
-                # Get indices of top 5 probabilities
-                top_indices = mx.argmax(pos_probs, axis=-1)[:5]
-                # Convert to (token, prob) pairs
-                pos_preds = [
-                    (self.tokenizer.decode([idx]), float(pos_probs[idx]))
-                    for idx in top_indices
-                ]
-                predictions.append(pos_preds)
 
             top_analysis = self.query_one(TopTokenAnalysisView)
             bottom_analysis = self.query_one(BottomTokenAnalysisView)
