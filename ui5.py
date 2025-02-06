@@ -125,27 +125,28 @@ if __name__ == "__main__":
     if "--test" in sys.argv:
         print("Running in test mode")
         
-        # Create and compose test app
+        # Create test app and debug widget tree
         test_app = TokenExplorer()
-        test_app.compose()  # Create the widget hierarchy
-        test_app.post_message(events.Mount())  # Simulate mounting
+        print("\nApp created")
         
-        # Now we can query widgets
-        text_area = test_app.query_one(TextArea)
-        text_area.text = "Test input"
+        # Try composing
+        widgets = test_app.compose()
+        print("\nCompose returned:", list(widgets))
         
-        # Create test event and inspect it
-        test_event = TextArea.Changed(text_area)
-        print("\nEvent type:", type(test_event))
-        print("\nBase classes:", test_event.__class__.__bases__)
-        print("\nAll attributes:", dir(test_event))
-        print("\nEvent dict:", vars(test_event))
+        # Debug widget tree
+        print("\nWidget tree before mount:")
+        print(test_app.tree)
         
-        # Test the actual handler
+        # Try mounting
+        test_app.post_message(events.Mount())
+        print("\nWidget tree after mount:")
+        print(test_app.tree)
+        
+        # Debug query
         try:
-            test_app.on_text_area_changed(test_event)
-            print("\nHandler executed successfully")
+            text_area = test_app.query_one(TextArea)
+            print("\nFound TextArea:", text_area)
         except Exception as e:
-            print(f"\nHandler error: {type(e).__name__}: {str(e)}")
+            print(f"\nError finding TextArea: {type(e).__name__}: {str(e)}")
     else:
         app.run()
