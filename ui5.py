@@ -3,6 +3,7 @@ A UI for exploring geometric transformation concepts.
 Visualize and manipulate embedding spaces and attention patterns.
 """
 
+import os
 import mlx.core as mx
 from mlx_lm import load, generate
 import asyncio
@@ -362,12 +363,15 @@ class TokenExplorer(App):
             tokens = [(self.tokenizer.decode([tid]), tid) for tid in token_ids]
 
             # Get model predictions and log shapes
-            log = self.query_one(Log)
-            log.write_line(f"token_ids shape: {mx.array([token_ids]).shape}")
-            model_output = self.model(mx.array([token_ids]))
-            log.write_line(f"model_output shape: {model_output.shape}")
-            logits = model_output[-1]  # Get last layer logits
-            log.write_line(f"logits shape: {logits.shape}")
+            try:
+                log = self.query_one(Log)
+                log.write_line(f"token_ids shape: {mx.array([token_ids]).shape}")
+                model_output = self.model(mx.array([token_ids]))
+                log.write_line(f"model_output shape: {model_output.shape}")
+                logits = model_output[-1]  # Get last layer logits
+                log.write_line(f"logits shape: {logits.shape}")
+            except Exception as e:
+                print(f"Error accessing log in _handle_inactivity: {type(e).__name__}: {str(e)}")
 
             # don't forget to keep some stats on the distribution of this
             probs = mx.softmax(logits, axis=-1)
