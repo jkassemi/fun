@@ -129,6 +129,10 @@ class TokenExplorer(App):
         margin: 1;
     }
 
+    #horizontal {
+        height: 4;
+    }
+
     #inactivity-progress {
         width: 100%;
         height: 1;
@@ -147,7 +151,7 @@ class TokenExplorer(App):
     }
     
     Log {
-        height: 8;
+        height: 10;
         border: solid red;
         margin: 1;
     }
@@ -163,10 +167,10 @@ class TokenExplorer(App):
     def compose(self) -> ComposeResult:
         """Create child widgets for the app."""
         yield Header()
-        with Horizontal():
+        with Horizontal(id="horizontal"):
             yield Button("Load Model", id="load-model")
             yield Button("Generate", id="generate", disabled=True)
-        yield ProgressBar(total=100, show_percentage=False, id="inactivity-progress")
+            yield ProgressBar(total=100, show_percentage=False, id="inactivity-progress")
         yield TextArea()
         yield TopTokenAnalysisView()
         yield BottomTokenAnalysisView()
