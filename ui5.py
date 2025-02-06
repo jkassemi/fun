@@ -358,6 +358,11 @@ class TokenExplorer(App):
             text_area = self.query_one(TextArea)
             current_text = text_area.text
 
+            if self.model is None or self.tokenizer is None:
+                log = self.query_one(Log)
+                log.write_line("Please load model first")
+                return
+
             # Tokenize with MLX tokenizer
             token_ids = self.tokenizer.encode(current_text)
             tokens = [(self.tokenizer.decode([tid]), tid) for tid in token_ids]
