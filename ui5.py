@@ -196,6 +196,10 @@ class TokenExplorer(App):
         await asyncio.sleep(3.0)
         print("Text area inactive for 3 seconds")
         
+        # Get current text
+        text_area = self.query_one(TextArea)
+        current_text = text_area.text
+        
         # Mock tokenization - in practice, use your MLX tokenizer
         tokens = [(word, hash(word) % 10000) 
                  for word in current_text.split()]
