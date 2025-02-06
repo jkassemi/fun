@@ -142,10 +142,11 @@ class TokenExplorer(App):
                  for word in current_text.split()]
         
         # Mock predictions for each token - in practice, get these from your MLX model
-        mock_predictions = [[
-            (f"pred{i}_{pos}", 0.9/(i+1)) 
-            for i in range(5)
-        ] for pos in range(len(tokens))]
+        example_predictions = [
+            ("jumps", 0.25), ("runs", 0.15), ("leaps", 0.10), 
+            ("walks", 0.08), ("sits", 0.05)
+        ]
+        mock_predictions = [example_predictions for _ in range(len(tokens))]
         
         analysis = self.query_one(TokenAnalysisView)
         analysis.update_current_tokens(tokens, predictions=mock_predictions)
