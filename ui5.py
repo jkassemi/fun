@@ -179,32 +179,15 @@ class TokenExplorer(App):
         if event.button.id == "load-model":
             try:
                 log.write_line("Starting model load...")
-                # Fork process for model loading
-                import os
-                import sys
-                pid = os.fork()
-                
-                if pid == 0:  # Child process
-                    try:
-                        checkpoint = "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B"
-                        model, tokenizer = load(path_or_hf_repo=checkpoint)
-                        # Child succeeded
-                        os._exit(0)
-                    except Exception as e:
-                        # Child failed
-                        log.write_line(f"Child process error: {type(e).__name__}: {str(e)}")
-                        os._exit(1)
-                else:  # Parent process
-                    import asyncio
-                    # Wait for child
-                    _, status = os.waitpid(pid, 0)
-                    if status == 0:
-                        log.write_line("Model loaded successfully!")
-                        self.query_one("#generate").disabled = False
-                    else:
-                        log.write_line("Failed to load model in child process")
+                # Run model loading in executor to keep UI responsive
+                checkpoint = "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B"
+                self.model, self.tokenizer = await asyncio.get_event_loop().run_in_executor(
+                    None, lambda: load(path_or_hf_repo=checkpoint)
+                )
+                log.write_line("Model loaded successfully!")
+                self.query_one("#generate").disabled = False
             except Exception as e:
-                log.write_line(f"Parent process error: {type(e).__name__}: {str(e)}")
+                log.write_line(f"Error loading model: {type(e).__name__}: {str(e)}")
             
         elif event.button.id == "generate":
             if self.model and self.tokenizer:
