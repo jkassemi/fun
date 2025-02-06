@@ -362,16 +362,15 @@ class TokenExplorer(App):
             token_ids = self.tokenizer.encode(current_text)
             tokens = [(self.tokenizer.decode([tid]), tid) for tid in token_ids]
 
+            log = self.query_one(Log)
+            log.write_line(f"token_ids shape: {mx.array([token_ids]).shape}")
+
             # Get model predictions and log shapes
-            try:
-                log = self.query_one(Log)
-                log.write_line(f"token_ids shape: {mx.array([token_ids]).shape}")
-                model_output = self.model(mx.array([token_ids]))
-                log.write_line(f"model_output shape: {model_output.shape}")
-                logits = model_output[-1]  # Get last layer logits
-                log.write_line(f"logits shape: {logits.shape}")
-            except Exception as e:
-                print(f"Error accessing log in _handle_inactivity: {type(e).__name__}: {str(e)}")
+            model_output = self.model(mx.array([token_ids]))
+            log.write_line(f"model_output shape: {model_output.shape}")
+
+            logits = model_output[-1]  # Get last layer logits
+            log.write_line(f"logits shape: {logits.shape}")
 
             # don't forget to keep some stats on the distribution of this
             probs = mx.softmax(logits, axis=-1)
@@ -398,7 +397,7 @@ class TokenExplorer(App):
         except Exception as e:
             try:
                 log = self.query_one(Log)
-                log.write_line(f"Error: {e}")
+                log.write_line(f"Error in _handle_inactivity: {type(e).__name__}: {str(e)}")
             except:
                 pass
 
