@@ -200,11 +200,9 @@ class TokenExplorer(App):
 
 if __name__ == "__main__":
     import sys
-    app = TokenExplorer()
-
     checkpoint: str = "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B"
-
     model, tokenizer = load(path_or_hf_repo=checkpoint)
+    app = TokenExplorer(model, tokenizer)
     # # Load the model
     # self.model, self.tokenizer = load(path_or_hf_repo="deepseek-ai/DeepSeek-R1-Distill-Qwen-7B")
     
