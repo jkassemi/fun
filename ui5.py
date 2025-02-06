@@ -34,6 +34,30 @@ class TopTokenAnalysisView(Static):
             "top(n=5)|v", "top(n=5)|p"
         )
 
+    def update_current_tokens(self, tokens: List[Tuple[str, int]], locked_positions: set = None, predictions: List[List[Tuple[str, float]]] = None):
+        """Update the current tokens display"""
+        if locked_positions is None:
+            locked_positions = set()
+        if predictions is None:
+            predictions = [[("", 0.0)] * 5] * len(tokens)  # Default empty predictions
+            
+        table = self.query_one("#top-token-table", DataTable)
+        table.clear()
+        
+        for pos, ((token, token_id), token_predictions) in enumerate(zip(tokens, predictions)):
+            is_locked = "🔒" if pos in locked_positions else ""
+            
+            # Pad predictions to ensure 5 entries
+            while len(token_predictions) < 5:
+                token_predictions.append(("", 0.0))
+            
+            # Flatten predictions into alternating token/probability values
+            pred_values = []
+            for pred_token, pred_prob in token_predictions[:5]:
+                pred_values.extend([pred_token, f"{pred_prob:.4f}"])
+            
+            table.add_row(str(pos), token, str(token_id), is_locked, *pred_values)
+
 class BottomTokenAnalysisView(Static):
     """Shows bottom token predictions"""
     
