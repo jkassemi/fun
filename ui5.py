@@ -361,11 +361,16 @@ class TokenExplorer(App):
             token_ids = self.tokenizer.encode(current_text)
             tokens = [(self.tokenizer.decode([tid]), tid) for tid in token_ids]
 
-            # Get model predictions
-            logits = self.model(mx.array([token_ids]))[-1]  # Get last layer logits
+            # Get model predictions and log shapes
+            log.write_line(f"token_ids shape: {mx.array([token_ids]).shape}")
+            model_output = self.model(mx.array([token_ids]))
+            log.write_line(f"model_output shape: {model_output.shape}")
+            logits = model_output[-1]  # Get last layer logits
+            log.write_line(f"logits shape: {logits.shape}")
 
             # don't forget to keep some stats on the distribution of this
             probs = mx.softmax(logits, axis=-1)
+            log.write_line(f"probs shape: {probs.shape}")
 
             # Get top 5 predictions for each position
             predictions = []
