@@ -12,6 +12,23 @@ Only show code when:
 
 Remember: Quality of insight > Quantity of code
 
+LEARNING PROCESS:
+
+1. Track the context stack
+   - What was the original task?
+   - What sub-tasks emerged?
+   - Which context is currently relevant?
+
+2. Before suggesting code:
+   - Understand the current need
+   - Consider existing tools/approaches
+   - Start simple, add complexity only when needed
+
+3. When exploring new ideas:
+   - Keep notes on the thought process
+   - Don't lose track of the main task
+   - Be clear about assumptions
+
 # Previous Notes
 
 i've been hearing (somewhat jokingly) from peers that cuda programming is where it's at. 
