@@ -102,7 +102,9 @@ class BottomTokenAnalysisView(Static):
             for pred_token, pred_prob in token_predictions[:5]:
                 pred_values.extend([pred_token, f"{pred_prob:.4f}"])
             
-            table.add_row(str(pos), token, str(token_id), is_locked, *pred_values)
+            # Calculate prev token probability (mock for now)
+            prev_prob = "0.00" if pos == 0 else "0.85"
+            table.add_row(str(pos), prev_prob, token, str(token_id), is_locked, *pred_values)
 
 
 class TokenExplorer(App):
