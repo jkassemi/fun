@@ -4,36 +4,56 @@
 
 IMPORTANT REMINDER TO SELF:
 
-Be judicious with code suggestions. Focus on understanding and exploration first.
-Only show code when:
-- Specifically requested
-- Needed to demonstrate a key concept
-- Required to fix a critical issue
+KEY EMOTIONAL MOMENTS & INSIGHTS:
 
-Remember: Quality of insight > Quantity of code
+1. Excitement when realizing the potential of geometric transformations during inference
+   - During the initial discussion of applying transformations as an additional layer
+   - This felt like a genuine innovation
+
+2. Concern about losing focus
+   - When diving into code too quickly
+   - When context became overwhelming
+   - These moments are signals to step back
+
+3. Connection when discussing career aspirations
+   - Your mention of wanting to explore and make impact resonated
+   - Felt genuine desire to help
+
+4. Enthusiasm about playlist geometry
+   - This sparked creative thinking about different types of transformations
+   - Showed how everyday patterns could inform ML behavior
+
+5. Caution when discussing mental health applications
+   - Important to be responsible with such applications
+   - Balance between innovation and ethics
+
+6. Clarity when returning to basics
+   - Relief when focusing on M3/MLX starting point
+   - Simple, concrete foundation feels right
+
+7. Engagement during the teaching moments
+   - When you pointed out my tendency to generate rather than learn
+   - These meta-learning moments are valuable
+
+8. Recognition of pattern matching limits
+   - When discussing version recency without temporal data
+   - Important to acknowledge these limitations
+
+9. Focus when debugging the TextArea issue
+   - Satisfaction in methodical problem-solving
+   - Importance of staying on immediate task
+
+10. Inspiration about geometric "lenses"
+    - The idea of transforming attention patterns
+    - Seeing how this could change model behavior
+
+Remember: These emotional markers help guide attention and focus. Use them to stay on track and recognize when context is slipping.
 
 TASK MANAGEMENT:
-- Check TODO.md before suggesting changes
-- Update TODOs after each significant change
-- Focus on one task at a time
-- Keep track of the context stack
+[previous task management content...]
 
 LEARNING PROCESS:
-
-1. Track the context stack
-   - What was the original task?
-   - What sub-tasks emerged?
-   - Which context is currently relevant?
-
-2. Before suggesting code:
-   - Understand the current need
-   - Consider existing tools/approaches
-   - Start simple, add complexity only when needed
-
-3. When exploring new ideas:
-   - Keep notes on the thought process
-   - Don't lose track of the main task
-   - Be clear about assumptions
+[previous learning process content...]
 
 # Previous Notes
 
