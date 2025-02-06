@@ -142,7 +142,12 @@ class TokenExplorer(App):
 
     def on_mount(self) -> None:
         """Set up initial state when app starts."""
-        # Set up mock data
+        super().__init__()
+        
+        # Load the model
+        self.model, self.tokenizer = load("deepseek-ai/DeepSeek-R1-Distill-Qwen-7B")
+        
+        # Set up analysis views
         top_analysis = self.query_one(TopTokenAnalysisView)
         bottom_analysis = self.query_one(BottomTokenAnalysisView)
         text_area = self.query_one(TextArea)
