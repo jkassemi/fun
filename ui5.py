@@ -179,15 +179,22 @@ class TokenExplorer(App):
         if event.button.id == "load-model":
             try:
                 log.write_line("Starting model load...")
+                log.write_line(f"Button handler environment:")
+                log.write_line(f"HF_TOKEN: {os.environ.get('HF_TOKEN')}")
+                log.write_line(f"PWD: {os.environ.get('PWD')}")
+                
                 # Run model loading in executor to keep UI responsive
                 checkpoint = "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B"
                 self.model, self.tokenizer = await asyncio.get_event_loop().run_in_executor(
                     None, lambda: load(path_or_hf_repo=checkpoint)
                 )
                 log.write_line("Model loaded successfully!")
+                log.write_line(f"Model info: {self.model.__class__.__name__}")
+                log.write_line(f"Tokenizer info: {self.tokenizer.__class__.__name__}")
                 self.query_one("#generate").disabled = False
             except Exception as e:
                 log.write_line(f"Error loading model: {type(e).__name__}: {str(e)}")
+                log.write_line(f"Error details: {str(e)}")
             
         elif event.button.id == "generate":
             if self.model and self.tokenizer:
@@ -300,9 +307,22 @@ class TokenExplorer(App):
 
 if __name__ == "__main__":
     import sys
+    import os
+    
+    print("\nMain process environment:")
+    print("HF_TOKEN:", os.environ.get('HF_TOKEN'))
+    print("PWD:", os.environ.get('PWD'))
+    
+    print("\nTrying model load in main process...")
+    try:
+        model, tokenizer = load("deepseek-ai/DeepSeek-R1-Distill-Qwen-7B")
+        print("Main process model load succeeded!")
+        print("Model info:", model.__class__.__name__)
+        print("Tokenizer info:", tokenizer.__class__.__name__)
+    except Exception as e:
+        print("Main process model load failed:", str(e))
+    
     app = TokenExplorer()
-    # # Load the model
-    # self.model, self.tokenizer = load(path_or_hf_repo="deepseek-ai/DeepSeek-R1-Distill-Qwen-7B")
     
     # Allow --test flag for automated testing
     if "--test" in sys.argv:
