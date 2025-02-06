@@ -125,10 +125,12 @@ if __name__ == "__main__":
     if "--test" in sys.argv:
         print("Running in test mode")
         
-        # Create test app
+        # Create and compose test app
         test_app = TokenExplorer()
+        test_app.compose()  # Create the widget hierarchy
+        test_app.post_message(events.Mount())  # Simulate mounting
         
-        # Debug event properties
+        # Now we can query widgets
         text_area = test_app.query_one(TextArea)
         text_area.text = "Test input"
         
