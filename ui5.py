@@ -114,5 +114,15 @@ class TokenExplorer(App):
         analysis.update_current_tokens(tokens)
 
 if __name__ == "__main__":
+    import sys
     app = TokenExplorer()
-    app.run()
+    
+    # Allow --test flag for automated testing
+    if "--test" in sys.argv:
+        # Run test code here
+        print("Running in test mode")
+        # Example test: Create app and verify initial state
+        test_app = TokenExplorer()
+        # Add test assertions here
+    else:
+        app.run()
