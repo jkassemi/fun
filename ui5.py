@@ -177,7 +177,7 @@ class TokenExplorer(App):
         log = self.query_one(Log)
         if event.button.id == "load-model":
             log.write_line("Loading model...")
-            checkpoint = "mlx-community/Llama-2-7b-chat-4bit"
+            checkpoint = "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B"
             self.model, self.tokenizer = load(path_or_hf_repo=checkpoint)
             log.write_line("Model loaded!")
             self.query_one("#generate").disabled = False
