@@ -1,3 +1,12 @@
+"""
+MOCK UI FOR EXPLORATION ONLY
+
+This is a prototype UI for exploring geometric transformation concepts.
+Currently uses mock data instead of real model integration.
+The goal is to experiment with different ways of visualizing and 
+manipulating embedding spaces and attention patterns.
+"""
+
 from textual.app import App, ComposeResult
 from textual.containers import Horizontal, Vertical
 from textual.widgets import Header, Footer, Static, DataTable, TextArea
