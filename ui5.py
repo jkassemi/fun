@@ -8,7 +8,7 @@ from mlx_lm import load, generate
 import asyncio
 from textual.app import App, ComposeResult
 from textual.containers import Horizontal, Vertical
-from textual.widgets import Header, Footer, Static, DataTable, TextArea
+from textual.widgets import Header, Footer, Static, DataTable, TextArea, ProgressBar
 from textual import events
 import numpy as np
 from typing import List, Dict, Tuple
@@ -138,11 +138,13 @@ class TokenExplorer(App):
         self.model = model
         self.tokenizer = tokenizer
         self._inactivity_timer = None
+        self._progress_timer = None
 
     def compose(self) -> ComposeResult:
         """Create child widgets for the app."""
         yield Header()
         yield TextArea()
+        yield ProgressBar(total=100, show_percentage=True)
         yield TopTokenAnalysisView()
         yield BottomTokenAnalysisView()
         yield Footer()
@@ -180,20 +182,36 @@ class TokenExplorer(App):
 
     async def on_text_area_changed(self, event: TextArea.Changed) -> None:
         """Handle text changes"""
-        # Cancel existing timer if any
+        # Cancel existing timers if any
         if self._inactivity_timer:
             self._inactivity_timer.cancel()
+        if self._progress_timer:
+            self._progress_timer.cancel()
             
-        # Create new timer
+        # Reset progress bar
+        progress = self.query_one(ProgressBar)
+        progress.update(progress=0)
+            
+        # Create new timers
         self._inactivity_timer = asyncio.create_task(self._handle_inactivity())
+        self._progress_timer = asyncio.create_task(self._update_progress())
         
         # Get the TextArea widget and its current content
         text_area = self.query_one(TextArea)
         current_text = text_area.text
         
+    async def _update_progress(self) -> None:
+        """Update progress bar during inactivity period"""
+        progress = self.query_one(ProgressBar)
+        for i in range(30):  # 30 steps over 3 seconds
+            await asyncio.sleep(0.1)  # 100ms per step
+            progress.update(progress=((i+1) * 100) // 30)
+            
     async def _handle_inactivity(self) -> None:
         """Called when text area has been inactive for 3 seconds"""
         await asyncio.sleep(3.0)
+        progress = self.query_one(ProgressBar)
+        progress.update(progress=100)
         print("Text area inactive for 3 seconds")
         
         # Get current text
