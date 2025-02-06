@@ -124,13 +124,14 @@ class TokenExplorer(App):
     }
     
     TextArea {
-        height: 1fr;
+        height: 2fr;
         border: solid green;
         margin: 1;
     }
 
     #inactivity-progress {
         width: 100%;
+        height: 1;
         margin: 1;
         align: right middle;
     }
@@ -146,7 +147,7 @@ class TokenExplorer(App):
     }
     
     Log {
-        height: 5;
+        height: 8;
         border: solid red;
         margin: 1;
     }
