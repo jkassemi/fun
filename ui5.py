@@ -19,7 +19,7 @@ class TokenAnalysisView(Static):
     
     def compose(self) -> ComposeResult:
         """Create tables for token analysis"""
-        yield Static("Current Token Analysis", classes="table-header")
+        yield Static("next token", classes="table-header")
         yield DataTable(id="token-table")
         with Horizontal():
             yield DataTable(id="top-tokens")
@@ -87,9 +87,7 @@ class TokenExplorer(App):
     .table-header {
         background: $accent;
         color: $text;
-        padding: 1;
         text-align: center;
-        font-weight: bold;
     }
     
     TextArea {
