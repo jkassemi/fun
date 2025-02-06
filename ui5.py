@@ -8,7 +8,7 @@ from mlx_lm import load, generate
 import asyncio
 from textual.app import App, ComposeResult
 from textual.containers import Horizontal, Vertical
-from textual.widgets import Header, Footer, Static, DataTable, TextArea, ProgressBar, Log
+from textual.widgets import Header, Footer, Static, DataTable, TextArea, ProgressBar, Log, Button
 from textual import events
 import numpy as np
 from typing import List, Dict, Tuple
@@ -109,7 +109,14 @@ class BottomTokenAnalysisView(Static):
 class TokenExplorer(App):
     """Interactive token exploration interface"""
     
+    BINDINGS = [
+        ("ctrl+r", "reload_app", "Reload"),
+    ]
+
     CSS = """
+    Button {
+        margin: 1;
+    }
     .table-header {
         background: $accent;
         color: $text;
@@ -145,22 +152,49 @@ class TokenExplorer(App):
     }
     """
 
-    def __init__(self, model, tokenizer):
+    def __init__(self):
         super().__init__()
-        self.model = model
-        self.tokenizer = tokenizer
+        self.model = None
+        self.tokenizer = None
         self._inactivity_timer = None
         self._progress_timer = None
 
     def compose(self) -> ComposeResult:
         """Create child widgets for the app."""
         yield Header()
+        with Horizontal():
+            yield Button("Load Model", id="load-model")
+            yield Button("Generate", id="generate", disabled=True)
         yield ProgressBar(total=100, show_percentage=False, id="inactivity-progress")
         yield TextArea()
         yield TopTokenAnalysisView()
         yield BottomTokenAnalysisView()
         yield Log()
         yield Footer()
+
+    async def on_button_pressed(self, event: Button.Pressed) -> None:
+        """Handle button presses"""
+        log = self.query_one(Log)
+        if event.button.id == "load-model":
+            log.write_line("Loading model...")
+            checkpoint = "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B"
+            self.model, self.tokenizer = load(path_or_hf_repo=checkpoint)
+            log.write_line("Model loaded!")
+            self.query_one("#generate").disabled = False
+            
+        elif event.button.id == "generate":
+            if self.model and self.tokenizer:
+                text_area = self.query_one(TextArea)
+                log.write_line("Generating...")
+                response = generate(
+                    model=self.model,
+                    tokenizer=self.tokenizer,
+                    prompt=self.tokenizer.encode(text_area.text),
+                    max_tokens=100,
+                    verbose=True,
+                )
+                text_area.text = response
+                log.write_line("Generation complete!")
 
     def on_mount(self) -> None:
         """Set up initial state when app starts."""
@@ -259,9 +293,7 @@ class TokenExplorer(App):
 
 if __name__ == "__main__":
     import sys
-    checkpoint: str = "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B"
-    model, tokenizer = load(path_or_hf_repo=checkpoint)
-    app = TokenExplorer(model, tokenizer)
+    app = TokenExplorer()
     # # Load the model
     # self.model, self.tokenizer = load(path_or_hf_repo="deepseek-ai/DeepSeek-R1-Distill-Qwen-7B")
     
