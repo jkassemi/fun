@@ -224,22 +224,30 @@ class TokenExplorer(App):
         text_area = self.query_one(TextArea)
         current_text = text_area.text
         
-        # Mock tokenization - in practice, use your MLX tokenizer
-        tokens = [(word, hash(word) % 10000) 
-                 for word in current_text.split()]
+        # Tokenize with MLX tokenizer
+        token_ids = self.tokenizer.encode(current_text)
+        tokens = [(self.tokenizer.decode([tid]), tid) for tid in token_ids]
         
-        # Mock predictions for each token - in practice, get these from your MLX model
-        example_predictions = [
-            ("jumps", 0.25), ("runs", 0.15), ("leaps", 0.10), 
-            ("walks", 0.08), ("sits", 0.05)
-        ]
-        mock_predictions = [example_predictions for _ in range(len(tokens))]
+        # Get model predictions
+        logits = self.model(mx.array([token_ids]))[-1]  # Get last layer logits
+        probs = mx.softmax(logits, axis=-1)
+        
+        # Get top 5 predictions for each position
+        predictions = []
+        for pos_probs in probs[0]:  # First batch item
+            # Get indices of top 5 probabilities
+            top_indices = mx.argmax(pos_probs, axis=-1)[:5]
+            # Convert to (token, prob) pairs
+            pos_preds = [(self.tokenizer.decode([idx]), float(pos_probs[idx])) 
+                        for idx in top_indices]
+            predictions.append(pos_preds)
         
         top_analysis = self.query_one(TopTokenAnalysisView)
         bottom_analysis = self.query_one(BottomTokenAnalysisView)
         
-        top_analysis.update_current_tokens(tokens, predictions=mock_predictions)
-        bottom_analysis.update_current_tokens(tokens, predictions=mock_predictions)
+        # Update views with real predictions
+        top_analysis.update_current_tokens(tokens, predictions=predictions)
+        bottom_analysis.update_current_tokens(tokens, predictions=predictions)
 
 if __name__ == "__main__":
     import sys
