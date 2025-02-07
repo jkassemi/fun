@@ -159,9 +159,9 @@ class TokenExplorer(App):
 
     def on_mount(self) -> None:
         """Set up initial state when app starts."""
-        # Set up analysis views
-        top_analysis = self.query_one(TokenAnalysisView)
-        bottom_analysis = self.query_one(TokenAnalysisView)
+        # Set up token tables and text area
+        top_table = self.query_one("#top-tokens", TokenTable)
+        bottom_table = self.query_one("#bottom-tokens", TokenTable)
         text_area = self.query_one(TextArea)
 
         # Set initial text
@@ -194,8 +194,8 @@ class TokenExplorer(App):
             ],
         ]
 
-        top_analysis.update_current_tokens(tokens, predictions=top_predictions)
-        bottom_analysis.update_current_tokens(tokens, predictions=bottom_predictions)
+        top_table.update_tokens(tokens, predictions=top_predictions)
+        bottom_table.update_tokens(tokens, predictions=bottom_predictions)
 
     async def on_text_area_changed(self, event: TextArea.Changed) -> None:
         """Handle text changes"""
