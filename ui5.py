@@ -179,8 +179,8 @@ class TokenExplorer(App):
     def on_mount(self) -> None:
         """Set up initial state when app starts."""
         # Set up analysis views
-        top_analysis = self.query_one(TopTokenAnalysisView)
-        bottom_analysis = self.query_one(BottomTokenAnalysisView)
+        top_analysis = self.query_one(TokenAnalysisView)
+        bottom_analysis = self.query_one(TokenAnalysisView)
         text_area = self.query_one(TextArea)
 
         # Set initial text
@@ -278,8 +278,8 @@ class TokenExplorer(App):
                                for idx in top_indices]
             predictions = [next_token_preds]  # Single position predictions
 
-            top_analysis = self.query_one(TopTokenAnalysisView)
-            bottom_analysis = self.query_one(BottomTokenAnalysisView)
+            top_analysis = self.query_one("#top-tokens", TokenAnalysisView)
+            bottom_analysis = self.query_one("#bottom-tokens", TokenAnalysisView)
 
             # Update views with real predictions
             top_analysis.update_current_tokens(input_tokens, predictions=predictions)
