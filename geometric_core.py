@@ -95,7 +95,7 @@ class GeometricCore:
             # Compute rotation in the plane defined by center and direction
             if field.direction is not None:
                 direction = field.direction / (mx.linalg.norm(field.direction) + 1e-6)
-                plane_normal = mx.cross(center, direction)
+                plane_normal = mx.linalg.cross(center, direction)
                 plane_normal = plane_normal / (mx.linalg.norm(plane_normal) + 1e-6)
                 
                 # Project embeddings onto rotation plane
@@ -106,7 +106,7 @@ class GeometricCore:
                 cos_angle = mx.cos(angle)
                 sin_angle = mx.sin(angle)
                 
-                rotated = cos_angle * proj + sin_angle * mx.cross(plane_normal, proj)
+                rotated = cos_angle * proj + sin_angle * mx.linalg.cross(plane_normal, proj)
                 return embeddings + (rotated - proj)
             
             # Simple rotation around center
