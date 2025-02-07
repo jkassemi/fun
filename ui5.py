@@ -24,43 +24,22 @@ import numpy as np
 from typing import List, Dict, Tuple
 
 
-class TokenAnalysisView(Static):
-    """Shows token predictions"""
+class TokenTable(DataTable):
+    """A table showing token information and predictions"""
     
-    def __init__(self, name: str, table_id: str):
-        super().__init__()
-        self.name = name
-        self.table_id = table_id
+    def __init__(self, id: str):
+        super().__init__(id=id)
+        self.add_columns("Position", "Token", "ID", "Predictions")
         
-    def compose(self) -> ComposeResult:
-        """Create table for token analysis"""
-        yield Static(f"{self.name} Predictions", classes="table-header")
-        yield DataTable(id=self.table_id)
-
-    def on_mount(self) -> None:
-        """Initialize the data table"""
-        token_table = self.query_one(f"#{self.table_id}", DataTable)
-        token_table.add_columns(
-            "Position", "Token", "ID", "Is Locked",
-            *[f"{self.name[:4]}(n={i})" for i in range(1, 6)]
-        )
-
-    def update_current_tokens(
-        self,
-        tokens: List[Tuple[str, int]],
-        predictions: List[List[Tuple[str, float]]] = None
-    ) -> None:
-        """Update the token display with predictions"""
+    def update_tokens(self, tokens: List[Tuple[str, int]], predictions: List[List[Tuple[str, float]]] = None):
+        """Update table with tokens and their predictions"""
+        self.clear()
         if not predictions:
-            predictions = [[("", 0.0)] * 5] * len(tokens)
-
-        table = self.query_one(f"#{self.table_id}", DataTable)
-        table.clear()
-
-        for pos, ((token, token_id), token_preds) in enumerate(zip(tokens, predictions)):
-            # Ensure 5 predictions per token
-            preds = (token_preds + [("", 0.0)] * 5)[:5]
-            table.add_row(str(pos), token, str(token_id), "", *[t for t,_ in preds])
+            predictions = [[]] * len(tokens)
+            
+        for pos, ((token, token_id), preds) in enumerate(zip(tokens, predictions)):
+            pred_str = " | ".join(f"{t}:{p:.2f}" for t,p in preds[:5]) if preds else ""
+            self.add_row(str(pos), token, str(token_id), pred_str)
 
 
 class TokenExplorer(App):
@@ -131,8 +110,10 @@ class TokenExplorer(App):
                 total=100, show_percentage=False, id="inactivity-progress"
             )
         yield TextArea()
-        yield TokenAnalysisView("Top", "top-tokens")
-        yield TokenAnalysisView("Bottom", "bottom-tokens") 
+        yield Static("Top Predictions", classes="table-header")
+        yield TokenTable(id="top-tokens")
+        yield Static("Bottom Predictions", classes="table-header")
+        yield TokenTable(id="bottom-tokens")
         yield Log()
         yield Footer()
 
@@ -278,12 +259,12 @@ class TokenExplorer(App):
                                for idx in top_indices]
             predictions = [next_token_preds]  # Single position predictions
 
-            top_analysis = self.query_one("#top-tokens", TokenAnalysisView)
-            bottom_analysis = self.query_one("#bottom-tokens", TokenAnalysisView)
-
-            # Update views with real predictions
-            top_analysis.update_current_tokens(input_tokens, predictions=predictions)
-            bottom_analysis.update_current_tokens(input_tokens, predictions=predictions)
+            # Update token tables with predictions
+            top_table = self.query_one("#top-tokens", TokenTable)
+            bottom_table = self.query_one("#bottom-tokens", TokenTable)
+            
+            top_table.update_tokens(input_tokens, predictions=predictions)
+            bottom_table.update_tokens(input_tokens, predictions=[])  # Empty for bottom table
         except Exception as e:
             try:
                 import traceback
