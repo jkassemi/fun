@@ -17,8 +17,8 @@ class GeometricExplorer:
         sample_ids = self.tokenizer.encode(sample_text)
         # Get hidden size from model output
         sample_output = self.model(mx.array([sample_ids]))
-        hidden_size = sample_output.shape[-1]
-        self.core = GeometricCore(hidden_size)
+        self.hidden_size = sample_output.shape[-1]
+        self.core = GeometricCore(self.hidden_size)
         
     def get_embeddings(self, text: str) -> Tuple[List[Tuple[str, int]], mx.array]:
         """Get token IDs and embeddings for text"""
@@ -33,7 +33,7 @@ class GeometricExplorer:
                          strength: float = 1.0) -> None:
         """Add a transformation field"""
         if center is None:
-            center = mx.random.normal((hidden_size,))
+            center = mx.random.normal((self.hidden_size,))
             
         field = TransformationField(
             center=center,
