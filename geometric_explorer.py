@@ -33,7 +33,7 @@ class GeometricExplorer:
                          strength: float = 1.0) -> None:
         """Add a transformation field"""
         if center is None:
-            center = mx.random.normal((self.model.config.hidden_size,))
+            center = mx.random.normal((hidden_size,))
             
         field = TransformationField(
             center=center,
@@ -57,11 +57,15 @@ class GeometricExplorer:
         # Apply transformations
         transformed = self.core.apply_all_fields(embeddings)
         
-        # Generate from transformed embeddings
-        output_ids = self.model.generate(transformed, max_tokens=20)
-        output_text = self.tokenizer.decode(output_ids[0].tolist())
-        
-        print(f"\nTransformed output: {output_text}")
+        # Analyze token patterns
+        print("\nToken Analysis:")
+        for i, (token, token_id) in enumerate(tokens):
+            print(f"{i:2d}. '{token}' (ID: {token_id})")
+            # Compare original vs transformed embeddings for this token
+            orig_norm = mx.linalg.norm(embeddings[0,i])
+            trans_norm = mx.linalg.norm(transformed[0,i])
+            delta = (trans_norm - orig_norm) / orig_norm
+            print(f"    Δnorm: {delta:+.2%}")
         
         # Show transformation effects
         print("\nTransformation analysis:")
