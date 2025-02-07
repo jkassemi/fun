@@ -70,7 +70,7 @@ class GeometricCore:
             
         elif field.transform_type == TransformationType.SCALING:
             # Scale along center direction
-            sim = mx.dot(embeddings, center) / (mx.linalg.norm(embeddings, axis=-1) + 1e-6)
+            sim = mx.matmul(embeddings, center) / (mx.linalg.norm(embeddings, axis=-1) + 1e-6)
             scale_factor = 1.0 + field.strength * sim.reshape(-1, 1)
             return embeddings * scale_factor
             
@@ -83,12 +83,12 @@ class GeometricCore:
             
         elif field.transform_type == TransformationType.REFLECTION:
             # Reflect across hyperplane defined by center normal
-            sim = mx.dot(embeddings, center) / (mx.linalg.norm(embeddings, axis=-1) + 1e-6)
+            sim = mx.matmul(embeddings, center) / (mx.linalg.norm(embeddings, axis=-1) + 1e-6)
             return embeddings - 2 * field.strength * sim.reshape(-1, 1) * center
             
         elif field.transform_type == TransformationType.PROJECTION:
             # Project onto subspace defined by center
-            sim = mx.dot(embeddings, center) / (mx.linalg.norm(embeddings, axis=-1) + 1e-6)
+            sim = mx.matmul(embeddings, center) / (mx.linalg.norm(embeddings, axis=-1) + 1e-6)
             return field.strength * sim.reshape(-1, 1) * center
             
         return embeddings
