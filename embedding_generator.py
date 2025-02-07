@@ -26,14 +26,22 @@ class EmbeddingGenerator:
         
         # Define concept pairs for different semantic dimensions
         self.concept_pairs = {
-            "morality": ConceptPair(
-                "good",
-                "bad",
+            "truth": ConceptPair(
+                "I swear on my life this is true",
+                "This is a complete fabrication"
             ),
-            "freedom": ConceptPair(
-                "structured",
-                "loose"
+            "emotion": ConceptPair(
+                "My heart is overflowing with joy and love",
+                "I feel nothing but emptiness and despair"
             ),
+            "power": ConceptPair(
+                "I have absolute control over my destiny",
+                "I am completely powerless to change anything"
+            ),
+            "connection": ConceptPair(
+                "We are all deeply connected to each other",
+                "I am utterly alone in this vast universe"
+            )
         }
         
     def get_embedding(self, text: str) -> mx.array:

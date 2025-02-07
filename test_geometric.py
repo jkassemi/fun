@@ -67,14 +67,20 @@ def run_transformation_tests(save_dir: str = "results"):
     results["lenses"] = {}
     
     # Get meaningful concept embeddings
-    good_emb, bad_emb = generator.concept_embedding("morality")
-    structured_emb, loose_emb = generator.concept_embedding("freedom")
+    truth_emb, lie_emb = generator.concept_embedding("truth")
+    joy_emb, despair_emb = generator.concept_embedding("emotion")
+    power_emb, powerless_emb = generator.concept_embedding("power")
+    connected_emb, alone_emb = generator.concept_embedding("connection")
     
     concepts = {
-        "good": good_emb,
-        "bad": bad_emb,
-        "structured": structured_emb,
-        "loose": loose_emb
+        "truth": truth_emb,
+        "deception": lie_emb,
+        "joy": joy_emb,
+        "despair": despair_emb,
+        "power": power_emb,
+        "powerless": powerless_emb,
+        "connected": connected_emb,
+        "isolation": alone_emb
     }
     
     # Create and test technical lens
