@@ -50,6 +50,12 @@ class GeometricExplorer:
         concept_embedding = mx.mean(embeddings, axis=1)[0]
         self.core.add_concept(name, concept_embedding)
         
+    def generate_from_embeddings(self, embeddings: mx.array) -> str:
+        """Generate text from embeddings"""
+        # Use model to generate from the transformed embeddings
+        output_ids = generate(self.model, embeddings, self.tokenizer)
+        return self.tokenizer.decode(output_ids)
+
     def explore(self, text: str):
         """Interactive exploration of transformations"""
         tokens, embeddings = self.get_embeddings(text)
@@ -98,6 +104,11 @@ class GeometricExplorer:
         # Calculate overall change
         delta = mx.linalg.norm(transformed - embeddings) / mx.linalg.norm(embeddings)
         print(f"Relative change: {delta:.2%}")
+        
+        # Generate and show transformed text
+        print("\nTransformed text:")
+        transformed_text = self.generate_from_embeddings(transformed)
+        print(transformed_text)
 
 def main():
     explorer = GeometricExplorer()
