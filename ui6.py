@@ -1,20 +1,38 @@
 """
-MOCK UI FOR EXPLORATION ONLY
-
-This is a prototype UI for exploring geometric transformation concepts.
-Currently uses mock data instead of real model integration.
-The goal is to experiment with different ways of visualizing and 
-manipulating embedding spaces and attention patterns.
+UI for exploring geometric transformations of embeddings.
+Visualize and manipulate embedding spaces through different lenses.
 """
 
 from textual.app import App, ComposeResult
 from textual.containers import Horizontal, Vertical
-from textual.widgets import Header, Footer, Static, DataTable, TextArea
+from textual.widgets import Header, Footer, Static, DataTable, TextArea, Select
 from textual import events
+import mlx.core as mx
+from mlx_lm import load, generate
+from geometric_core import GeometricCore, TransformationField, TransformationType
+from embedding_generator import EmbeddingGenerator
 import numpy as np
-from typing import List, Dict, Tuple
+from typing import List, Dict, Tuple, Optional
 
-class TopTokenAnalysisView(Static):
+class TransformationView(Static):
+    """Controls for geometric transformations"""
+    
+    def compose(self) -> ComposeResult:
+        """Create transformation controls"""
+        yield Static("Geometric Transformations", classes="table-header")
+        with Horizontal():
+            yield Select(
+                ((t.value, t) for t in TransformationType),
+                id="transform-type",
+                value="rotation"
+            )
+            yield Select(
+                [("0.1", 0.1), ("0.5", 0.5), ("0.9", 0.9)],
+                id="transform-strength",
+                value=0.5
+            )
+
+class TokenAnalysisView(Static):
     """Shows top token predictions"""
     
     def compose(self) -> ComposeResult:
