@@ -363,24 +363,14 @@ class TokenExplorer(App):
                 log.write_line("Please load model first")
                 return
 
-            # Tokenize with MLX tokenizer
-            token_ids = self.tokenizer.encode(current_text)
-            tokens = [(self.tokenizer.decode([tid]), tid) for tid in token_ids]
-
-            log = self.query_one(Log)
-            log.write_line(f"token_ids shape: {mx.array([token_ids]).shape}")
-
-            # Get model predictions for next token
-            model_output = self.model(mx.array([token_ids]))
-            log.write_line(f"model_output shape: {model_output.shape}")
-
-            # Get logits for last position only
-            last_position_logits = model_output[-1, -1]  # Last layer, last position
-            log.write_line(f"last position logits shape: {last_position_logits.shape}")
-
-            # Get probabilities for next token
-            next_token_probs = mx.softmax(last_position_logits, axis=-1)
-            log.write_line(f"next token probs shape: {next_token_probs.shape}")
+            # Flow: text -> ids -> model -> logits -> probs
+            # Each step preserves meaning while changing shape
+            input_ids = self.tokenizer.encode(current_text)
+            input_tokens = [(self.tokenizer.decode([id]), id) for id in input_ids]
+            
+            model_logits = self.model(mx.array([input_ids]))
+            next_token_logits = model_logits[-1, -1]  # Last position only
+            next_token_probs = mx.softmax(next_token_logits, axis=-1)
 
             # Get top 5 predictions for next token
             predictions = []
