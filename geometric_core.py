@@ -25,6 +25,14 @@ class TransformationField:
     decay_rate: float = 1.0
     transform_type: TransformationType = TransformationType.ROTATION
 
+@dataclass
+class ConceptLens:
+    """A lens that emphasizes certain semantic aspects"""
+    name: str
+    primary_concepts: List[str]
+    strength: float = 0.5
+    contrast_concepts: List[str] = None
+
 class GeometricCore:
     """Core geometric operations on embedding spaces"""
     
@@ -32,6 +40,43 @@ class GeometricCore:
         self.embedding_dim = embedding_dim
         self.fields: List[TransformationField] = []
         self.concept_centers: Dict[str, mx.array] = {}
+        self.lenses: Dict[str, ConceptLens] = {}
+    
+    def create_lens(self, name: str, concepts: List[str], strength: float = 0.5, 
+                   contrast_concepts: List[str] = None) -> None:
+        """Create a semantic lens from concepts"""
+        self.lenses[name] = ConceptLens(name, concepts, strength, contrast_concepts)
+    
+    def apply_lens(self, embeddings: mx.array, lens_name: str) -> mx.array:
+        """Apply a semantic lens transformation"""
+        if lens_name not in self.lenses:
+            raise KeyError(f"Lens {lens_name} not found")
+            
+        lens = self.lenses[lens_name]
+        result = embeddings
+        
+        # Enhance primary concepts
+        for concept in lens.primary_concepts:
+            if concept in self.concept_centers:
+                field = TransformationField(
+                    center=self.concept_centers[concept],
+                    strength=lens.strength,
+                    transform_type=TransformationType.PROJECTION
+                )
+                result = self.apply_field(result, field)
+        
+        # Reduce contrast concepts if specified
+        if lens.contrast_concepts:
+            for concept in lens.contrast_concepts:
+                if concept in self.concept_centers:
+                    field = TransformationField(
+                        center=self.concept_centers[concept],
+                        strength=-lens.strength * 0.5,  # Softer contrast
+                        transform_type=TransformationType.PROJECTION
+                    )
+                    result = self.apply_field(result, field)
+        
+        return result
         
     def add_field(self, field: TransformationField) -> None:
         """Add a transformation field"""

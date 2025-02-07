@@ -54,9 +54,9 @@ def run_transformation_tests(save_dir: str = "results"):
             "std_delta_norm": float(mx.std(delta_norms))
         }
     
-    # Test 2: Concept Relationships
-    print("Testing concept relationships...")
-    results["concepts"] = {}
+    # Test 2: Semantic Lenses
+    print("\nTesting semantic lenses...")
+    results["lenses"] = {}
     
     # Create related concept pairs
     base = mx.random.normal((dim,))
@@ -66,14 +66,29 @@ def run_transformation_tests(save_dir: str = "results"):
         "opposite": -base + 0.1 * mx.random.normal((dim,))
     }
     
+    # Create and test technical lens
+    core.create_lens(
+        "technical", 
+        ["base"], 
+        strength=0.5,
+        contrast_concepts=["opposite"]
+    )
+    
     for name, embedding in concepts.items():
         core.add_concept(name, embedding)
     
+    # Apply lens and measure effects
+    lens_transformed = core.apply_lens(embeddings, "technical")
+    
+    # Calculate how lens affects similarity to concepts
     for concept in concepts:
-        sim = core.get_concept_similarity(embeddings[0], concept)
-        results["concepts"][concept] = {
-            "mean_sim": float(mx.mean(sim)),
-            "std_sim": float(mx.std(sim))
+        before_sim = core.get_concept_similarity(embeddings[0], concept)
+        after_sim = core.get_concept_similarity(lens_transformed[0], concept)
+        
+        results["lenses"][f"{concept}_effect"] = {
+            "before_mean_sim": float(mx.mean(before_sim)),
+            "after_mean_sim": float(mx.mean(after_sim)),
+            "delta": float(mx.mean(after_sim - before_sim))
         }
     
     # Save results
