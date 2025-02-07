@@ -12,7 +12,10 @@ from geometric_core import GeometricCore, TransformationField, TransformationTyp
 class GeometricExplorer:
     def __init__(self, model_name: str = "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B"):
         self.model, self.tokenizer = load(model_name)
-        self.core = GeometricCore(self.model.config.hidden_size)
+        # Get hidden size from model's first layer weight shape
+        first_layer = next(iter(self.model.parameters()))
+        hidden_size = first_layer.shape[-1]
+        self.core = GeometricCore(hidden_size)
         
     def get_embeddings(self, text: str) -> Tuple[List[Tuple[str, int]], mx.array]:
         """Get token IDs and embeddings for text"""
