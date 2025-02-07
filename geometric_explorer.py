@@ -12,9 +12,11 @@ from geometric_core import GeometricCore, TransformationField, TransformationTyp
 class GeometricExplorer:
     def __init__(self, model_name: str = "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B"):
         self.model, self.tokenizer = load(model_name)
-        # Get hidden size from model's first layer weight shape
-        first_layer = next(iter(self.model.parameters()))
-        hidden_size = first_layer.shape[-1]
+        # Get hidden size from model's embedding dimension
+        sample_text = "test"
+        sample_ids = self.tokenizer.encode(sample_text)
+        sample_embedding = self.model.embed(mx.array([sample_ids]))
+        hidden_size = sample_embedding.shape[-1]
         self.core = GeometricCore(hidden_size)
         
     def get_embeddings(self, text: str) -> Tuple[List[Tuple[str, int]], mx.array]:
