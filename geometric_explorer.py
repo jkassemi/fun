@@ -15,15 +15,16 @@ class GeometricExplorer:
         # Get hidden size from model's embedding dimension
         sample_text = "test"
         sample_ids = self.tokenizer.encode(sample_text)
-        sample_embedding = self.model.embed(mx.array([sample_ids]))
-        hidden_size = sample_embedding.shape[-1]
+        # Get hidden size from model output
+        sample_output = self.model(mx.array([sample_ids]))
+        hidden_size = sample_output.shape[-1]
         self.core = GeometricCore(hidden_size)
         
     def get_embeddings(self, text: str) -> Tuple[List[Tuple[str, int]], mx.array]:
         """Get token IDs and embeddings for text"""
         ids = self.tokenizer.encode(text)
         tokens = [(self.tokenizer.decode([id]), id) for id in ids]
-        return tokens, self.model.embed(mx.array([ids]))
+        return tokens, self.model(mx.array([ids]))
     
     def add_transformation(self, 
                          center: Optional[mx.array] = None,
