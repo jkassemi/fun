@@ -87,9 +87,10 @@ class GeometricCore:
             return embeddings - 2 * field.strength * sim.reshape(-1, 1) * center
             
         elif field.transform_type == TransformationType.PROJECTION:
-            # Project onto subspace defined by center
+            # Project onto subspace defined by center while preserving some original
             sim = mx.matmul(embeddings, center) / (mx.linalg.norm(embeddings, axis=-1) + 1e-6)
-            return field.strength * sim.reshape(-1, 1) * center
+            projection = sim.reshape(-1, 1) * center
+            return (1 - field.strength) * embeddings + field.strength * projection
             
         return embeddings
     
