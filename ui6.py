@@ -156,15 +156,15 @@ class TokenExplorer(App):
         """Create child widgets for the app."""
         yield Header()
         yield TextArea()
-        yield TopTokenAnalysisView()
-        yield BottomTokenAnalysisView()
+        yield TokenAnalysisView("Top", "top-tokens")
+        yield TokenAnalysisView("Bottom", "bottom-tokens")
         yield Footer()
 
     def on_mount(self) -> None:
         """Set up initial state when app starts."""
         # Set up mock data
-        top_analysis = self.query_one(TopTokenAnalysisView)
-        bottom_analysis = self.query_one(BottomTokenAnalysisView)
+        top_analysis = self.query_one("#top-tokens", TokenAnalysisView)
+        bottom_analysis = self.query_one("#bottom-tokens", TokenAnalysisView)
         text_area = self.query_one(TextArea)
         
         # Set initial text
@@ -208,8 +208,8 @@ class TokenExplorer(App):
         ]
         mock_predictions = [example_predictions for _ in range(len(tokens))]
         
-        top_analysis = self.query_one(TopTokenAnalysisView)
-        bottom_analysis = self.query_one(BottomTokenAnalysisView)
+        top_analysis = self.query_one("#top-tokens", TokenAnalysisView)
+        bottom_analysis = self.query_one("#bottom-tokens", TokenAnalysisView)
         
         top_analysis.update_current_tokens(tokens, predictions=mock_predictions)
         bottom_analysis.update_current_tokens(tokens, predictions=mock_predictions)
