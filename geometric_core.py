@@ -95,8 +95,16 @@ class GeometricCore:
             # Compute rotation in the plane defined by center and direction
             if field.direction is not None:
                 direction = field.direction / (mx.linalg.norm(field.direction) + 1e-6)
-                plane_normal = mx.linalg.cross(center, direction)
+                # Pad vectors to 3D for cross product
+                center_3d = mx.concatenate([center[:3], mx.zeros((max(0, 3-len(center))))])
+                direction_3d = mx.concatenate([direction[:3], mx.zeros((max(0, 3-len(direction))))])
+                
+                # Compute cross product in 3D
+                plane_normal = mx.linalg.cross(center_3d, direction_3d)
                 plane_normal = plane_normal / (mx.linalg.norm(plane_normal) + 1e-6)
+                
+                # Project back to full dimension
+                plane_normal = mx.concatenate([plane_normal, mx.zeros((max(0, len(center)-3)))])
                 
                 # Project embeddings onto rotation plane
                 proj = embeddings - mx.matmul(embeddings, plane_normal.reshape(-1, 1)) * plane_normal
