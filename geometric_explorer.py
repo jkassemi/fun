@@ -52,10 +52,13 @@ class GeometricExplorer:
         
     def generate_from_embeddings(self, embeddings: mx.array) -> str:
         """Generate text from embeddings"""
-        # Use model to generate from the transformed embeddings
-        output_ids = generate(self.model, embeddings, self.tokenizer)
-        # Convert MLX array to list of token IDs
-        token_ids = [int(id) for id in output_ids.tolist()]
+        # Get logits from model
+        logits = self.model(embeddings)
+        # Get most likely token IDs
+        token_ids = mx.argmax(logits, axis=-1)
+        # Convert to list of ints
+        token_ids = [int(id) for id in token_ids.tolist()]
+        # Decode tokens to text
         return self.tokenizer.decode(token_ids)
 
     def explore(self, text: str):
