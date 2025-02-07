@@ -24,146 +24,43 @@ import numpy as np
 from typing import List, Dict, Tuple
 
 
-class TopTokenAnalysisView(Static):
-    """Shows top token predictions"""
-
+class TokenAnalysisView(Static):
+    """Shows token predictions"""
+    
+    def __init__(self, name: str, table_id: str):
+        super().__init__()
+        self.name = name
+        self.table_id = table_id
+        
     def compose(self) -> ComposeResult:
-        """Create tables for token analysis"""
-        yield Static("Top Predictions", classes="table-header")
-        yield DataTable(id="top-token-table")
+        """Create table for token analysis"""
+        yield Static(f"{self.name} Predictions", classes="table-header")
+        yield DataTable(id=self.table_id)
 
     def on_mount(self) -> None:
-        """Initialize the data tables"""
-        token_table = self.query_one("#top-token-table", DataTable)
+        """Initialize the data table"""
+        token_table = self.query_one(f"#{self.table_id}", DataTable)
         token_table.add_columns(
-            "Position",
-            "prev(n=1)|p",
-            "Token",
-            "ID",
-            "Is Locked",
-            "top(n=1)|v",
-            "top(n=1)|p",
-            "top(n=2)|v",
-            "top(n=2)|p",
-            "top(n=3)|v",
-            "top(n=3)|p",
-            "top(n=4)|v",
-            "top(n=4)|p",
-            "top(n=5)|v",
-            "top(n=5)|p",
+            "Position", "Token", "ID", "Is Locked",
+            *[f"{self.name[:4]}(n={i})" for i in range(1, 6)]
         )
 
     def update_current_tokens(
         self,
         tokens: List[Tuple[str, int]],
-        locked_positions: set = None,
-        predictions: List[List[Tuple[str, float]]] = None,
-    ):
-        """Update the current tokens display"""
-        if locked_positions is None:
-            locked_positions = set()
-        if predictions is None:
-            predictions = [[("", 0.0)] * 5] * len(tokens)  # Default empty predictions
+        predictions: List[List[Tuple[str, float]]] = None
+    ) -> None:
+        """Update the token display with predictions"""
+        if not predictions:
+            predictions = [[("", 0.0)] * 5] * len(tokens)
 
-        try:
-            log = self.query_one(Log)
-            log.write_line("Top table starting token update")
-        except Exception as e:
-            print(f"Error in TopTokenAnalysisView.update_current_tokens: {type(e).__name__}: {str(e)}")
-
-        table = self.query_one("#top-token-table", DataTable)
+        table = self.query_one(f"#{self.table_id}", DataTable)
         table.clear()
 
-        for pos, ((token, token_id), token_predictions) in enumerate(
-            zip(tokens, predictions)
-        ):
-            is_locked = "🔒" if pos in locked_positions else ""
-
-            # Pad predictions to ensure 5 entries
-            while len(token_predictions) < 5:
-                token_predictions.append(("", 0.0))
-
-            # Flatten predictions into alternating token/probability values
-            pred_values = []
-            for pred_token, pred_prob in token_predictions[:5]:
-                pred_values.extend([pred_token, f"{pred_prob:.4f}"])
-
-            # Calculate prev token probability (mock for now)
-            prev_prob = "0.00" if pos == 0 else "0.85"
-            table.add_row(
-                str(pos), prev_prob, token, str(token_id), is_locked, *pred_values
-            )
-
-
-class BottomTokenAnalysisView(Static):
-    """Shows bottom token predictions"""
-
-    def compose(self) -> ComposeResult:
-        """Create tables for token analysis"""
-        yield Static("Bottom Predictions", classes="table-header")
-        yield DataTable(id="bottom-token-table")
-
-    def on_mount(self) -> None:
-        """Initialize the data tables"""
-        token_table = self.query_one("#bottom-token-table", DataTable)
-        token_table.add_columns(
-            "Position",
-            "prev(n=1)|p",
-            "Token",
-            "ID",
-            "Is Locked",
-            "bott(n=1)|v",
-            "bott(n=1)|p",
-            "bott(n=2)|v",
-            "bott(n=2)|p",
-            "bott(n=3)|v",
-            "bott(n=3)|p",
-            "bott(n=4)|v",
-            "bott(n=4)|p",
-            "bott(n=5)|v",
-            "bott(n=5)|p",
-        )
-
-    def update_current_tokens(
-        self,
-        tokens: List[Tuple[str, int]],
-        locked_positions: set = None,
-        predictions: List[List[Tuple[str, float]]] = None,
-    ):
-        """Update the current tokens display"""
-        if locked_positions is None:
-            locked_positions = set()
-        if predictions is None:
-            predictions = [[("", 0.0)] * 5] * len(tokens)  # Default empty predictions
-
-        try:
-            log = self.query_one(Log)
-            log.write_line("Bottom table starting token update")
-        except Exception as e:
-            print(f"Error in BottomTokenAnalysisView.update_current_tokens: {type(e).__name__}: {str(e)}")
-
-        table = self.query_one("#bottom-token-table", DataTable)
-        table.clear()
-
-        for pos, ((token, token_id), token_predictions) in enumerate(
-            zip(tokens, predictions)
-        ):
-            is_locked = "🔒" if pos in locked_positions else ""
-
-            # Pad predictions to ensure 5 entries
-            while len(token_predictions) < 5:
-                token_predictions.append(("", 0.0))
-
-            # Flatten predictions into alternating token/probability values
-            pred_values = []
-            for pred_token, pred_prob in token_predictions[:5]:
-                pred_values.extend([pred_token, f"{pred_prob:.4f}"])
-
-            # Calculate prev token probability (mock for now)
-            prev_prob = "0.00" if pos == 0 else "0.85"
-            table.add_row(
-                str(pos), prev_prob, token, str(token_id), is_locked, *pred_values
-            )
+        for pos, ((token, token_id), token_preds) in enumerate(zip(tokens, predictions)):
+            # Ensure 5 predictions per token
+            preds = (token_preds + [("", 0.0)] * 5)[:5]
+            table.add_row(str(pos), token, str(token_id), "", *[t for t,_ in preds])
 
 
 class TokenExplorer(App):
@@ -234,8 +131,8 @@ class TokenExplorer(App):
                 total=100, show_percentage=False, id="inactivity-progress"
             )
         yield TextArea()
-        yield TopTokenAnalysisView()
-        yield BottomTokenAnalysisView()
+        yield TokenAnalysisView("Top", "top-tokens")
+        yield TokenAnalysisView("Bottom", "bottom-tokens") 
         yield Log()
         yield Footer()
 
