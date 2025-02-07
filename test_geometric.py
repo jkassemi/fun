@@ -58,10 +58,12 @@ def run_transformation_tests(save_dir: str = "results"):
     print("Testing concept relationships...")
     results["concepts"] = {}
     
-    # Create synthetic concepts
+    # Create related concept pairs
+    base = mx.random.normal((dim,))
     concepts = {
-        "A": mx.random.normal((dim,)),
-        "B": mx.random.normal((dim,))
+        "base": base,
+        "similar": base + 0.1 * mx.random.normal((dim,)),
+        "opposite": -base + 0.1 * mx.random.normal((dim,))
     }
     
     for name, embedding in concepts.items():
