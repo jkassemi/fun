@@ -111,8 +111,9 @@ if __name__ == "__main__":
         print(f"Mean Δnorm: {metrics['mean_delta_norm']:+.2%}")
         print(f"Std Δnorm:  {metrics['std_delta_norm']:.2%}")
     
-    print("\nConcept Tests:")
-    for concept, metrics in results["concepts"].items():
-        print(f"\nConcept {concept}:")
-        print(f"Mean sim: {metrics['mean_sim']:+.2f}")
-        print(f"Std sim:  {metrics['std_sim']:.2f}")
+    print("\nLens Effect Tests:")
+    for concept, metrics in results["lenses"].items():
+        print(f"\nEffect on {concept}:")
+        print(f"Before: {metrics['before_mean_sim']:+.2f}")
+        print(f"After:  {metrics['after_mean_sim']:+.2f}")
+        print(f"Delta:  {metrics['delta']:+.2f}")
