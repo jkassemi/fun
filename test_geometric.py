@@ -31,7 +31,6 @@ def run_transformation_tests(save_dir: str = "results"):
     results = {}
     
     # Test parameters
-    dim = 64  # Small dimension for quick testing
     num_vectors = 10
     
     # Create generators and test data
@@ -44,7 +43,7 @@ def run_transformation_tests(save_dir: str = "results"):
     results["projections"] = {}
     
     for strength in [0.1, 0.5, 0.9]:
-        center = mx.random.normal((dim,))
+        center = mx.random.normal((generator.hidden_size,))
         field = TransformationField(
             center=center,
             transform_type=TransformationType.PROJECTION,
