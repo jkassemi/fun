@@ -385,8 +385,8 @@ class TokenExplorer(App):
             bottom_analysis = self.query_one(BottomTokenAnalysisView)
 
             # Update views with real predictions
-            top_analysis.update_current_tokens(tokens, predictions=predictions)
-            bottom_analysis.update_current_tokens(tokens, predictions=predictions)
+            top_analysis.update_current_tokens(input_tokens, predictions=predictions)
+            bottom_analysis.update_current_tokens(input_tokens, predictions=predictions)
         except Exception as e:
             try:
                 import traceback
