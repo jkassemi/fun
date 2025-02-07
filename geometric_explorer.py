@@ -54,7 +54,9 @@ class GeometricExplorer:
         """Generate text from embeddings"""
         # Use model to generate from the transformed embeddings
         output_ids = generate(self.model, embeddings, self.tokenizer)
-        return self.tokenizer.decode(output_ids)
+        # Convert MLX array to list of token IDs
+        token_ids = [int(id) for id in output_ids.tolist()]
+        return self.tokenizer.decode(token_ids)
 
     def explore(self, text: str):
         """Interactive exploration of transformations"""
