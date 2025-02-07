@@ -114,7 +114,10 @@ class GeometricCore:
                 cos_angle = mx.cos(angle)
                 sin_angle = mx.sin(angle)
                 
-                rotated = cos_angle * proj + sin_angle * mx.linalg.cross(plane_normal, proj)
+                # Instead of cross product, use a rotation matrix in the embedding space
+                rotated = (cos_angle * proj + 
+                         sin_angle * (mx.matmul(proj, center.reshape(-1, 1)) * direction - 
+                                    mx.matmul(proj, direction.reshape(-1, 1)) * center))
                 return embeddings + (rotated - proj)
             
             # Simple rotation around center
