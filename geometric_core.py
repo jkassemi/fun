@@ -54,7 +54,7 @@ class GeometricCore:
                 plane_normal = plane_normal / (mx.linalg.norm(plane_normal) + 1e-6)
                 
                 # Project embeddings onto rotation plane
-                proj = embeddings - mx.dot(embeddings, plane_normal.reshape(-1, 1)) * plane_normal
+                proj = embeddings - mx.matmul(embeddings, plane_normal.reshape(-1, 1)) * plane_normal
                 
                 # Apply rotation
                 angle = field.strength
@@ -65,7 +65,7 @@ class GeometricCore:
                 return embeddings + (rotated - proj)
             
             # Simple rotation around center
-            sim = mx.dot(embeddings, center) / (mx.linalg.norm(embeddings, axis=-1) + 1e-6)
+            sim = mx.matmul(embeddings, center) / (mx.linalg.norm(embeddings, axis=-1) + 1e-6)
             return embeddings + field.strength * sim.reshape(-1, 1) * center
             
         elif field.transform_type == TransformationType.SCALING:
@@ -106,4 +106,4 @@ class GeometricCore:
             raise KeyError(f"Concept {concept} not found")
             
         center = self.concept_centers[concept]
-        return mx.dot(embeddings, center) / (mx.linalg.norm(embeddings, axis=-1) + 1e-6)
+        return mx.matmul(embeddings, center) / (mx.linalg.norm(embeddings, axis=-1) + 1e-6)
