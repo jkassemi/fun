@@ -43,6 +43,13 @@ class GeometricExplorer:
         )
         self.core.add_field(field)
     
+    def add_concept(self, name: str, text: str) -> None:
+        """Add a concept by getting its embedding"""
+        _, embeddings = self.get_embeddings(text)
+        # Use mean embedding as concept center
+        concept_embedding = mx.mean(embeddings, axis=1)[0]
+        self.core.add_concept(name, concept_embedding)
+        
     def explore(self, text: str):
         """Interactive exploration of transformations"""
         tokens, embeddings = self.get_embeddings(text)
@@ -50,9 +57,25 @@ class GeometricExplorer:
         print(f"\nInput text: {text}")
         print(f"Tokens: {tokens}")
         
-        # Add some example transformations
-        self.add_transformation(transform_type=TransformationType.ROTATION)
-        self.add_transformation(transform_type=TransformationType.SCALING)
+        # Add some example concepts if none exist
+        if not self.core.concept_centers:
+            self.add_concept("positive", "excellent amazing wonderful")
+            self.add_concept("negative", "terrible horrible awful")
+            self.add_concept("technical", "computer software code")
+            self.add_concept("emotional", "happy sad angry love")
+            
+        # Show concept similarities
+        print("\nConcept Analysis:")
+        for concept in self.core.concept_centers.keys():
+            sim = self.core.get_concept_similarity(embeddings[0], concept)
+            print(f"{concept:>10}: {float(mx.mean(sim)):>+.2%}")
+            
+        # Add transformations based on concepts
+        self.add_transformation(
+            center=self.core.concept_centers["technical"],
+            transform_type=TransformationType.PROJECTION,
+            strength=0.5
+        )
         
         # Apply transformations
         transformed = self.core.apply_all_fields(embeddings)
