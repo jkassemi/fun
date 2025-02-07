@@ -7,13 +7,21 @@ import mlx.core as mx
 import numpy as np
 from typing import List, Tuple
 from geometric_core import GeometricCore, TransformationField, TransformationType
+from embedding_generator import EmbeddingGenerator
 import json
 from pathlib import Path
 
-def create_test_embeddings(dim: int, num_vectors: int) -> mx.array:
+def create_test_embeddings(generator: EmbeddingGenerator, num_vectors: int, 
+                         use_meaningful: bool = True) -> mx.array:
     """Create test embeddings with known properties"""
-    embeddings = mx.random.normal((1, num_vectors, dim))
-    # Normalize each vector
+    embeddings = []
+    for _ in range(num_vectors):
+        emb = generator.random_embedding(use_meaningful)
+        embeddings.append(emb)
+    
+    # Stack and normalize
+    embeddings = mx.stack(embeddings)
+    embeddings = embeddings.reshape(1, num_vectors, -1)
     norms = mx.linalg.norm(embeddings, axis=-1, keepdims=True)
     return embeddings / (norms + 1e-6)
 
@@ -26,9 +34,10 @@ def run_transformation_tests(save_dir: str = "results"):
     dim = 64  # Small dimension for quick testing
     num_vectors = 10
     
-    # Create core and test data
-    core = GeometricCore(dim)
-    embeddings = create_test_embeddings(dim, num_vectors)
+    # Create generators and test data
+    generator = EmbeddingGenerator()
+    core = GeometricCore(generator.hidden_size)
+    embeddings = create_test_embeddings(generator, num_vectors)
     
     # Test 1: Basic Projections
     print("\nTesting basic projections...")
@@ -58,12 +67,15 @@ def run_transformation_tests(save_dir: str = "results"):
     print("\nTesting semantic lenses...")
     results["lenses"] = {}
     
-    # Create related concept pairs
-    base = mx.random.normal((dim,))
+    # Get meaningful concept embeddings
+    technical_emb, creative_emb = generator.concept_embedding("technical")
+    emotional_emb, neutral_emb = generator.concept_embedding("emotional")
+    
     concepts = {
-        "base": base,
-        "similar": base + 0.1 * mx.random.normal((dim,)),
-        "opposite": -base + 0.1 * mx.random.normal((dim,))
+        "technical": technical_emb,
+        "creative": creative_emb,
+        "emotional": emotional_emb,
+        "neutral": neutral_emb
     }
     
     # Create and test technical lens
