@@ -267,3 +267,85 @@ weak-folding-dill 2025-02-09 12:53:16,026 - INFO - prompt [{"role": "user", "con
 weak-folding-dill 2025-02-09 12:53:16,971 - INFO - response "Okay"
 weak-folding-dill 2025-02-09 12:53:28,636 - INFO - prompt [{"role": "user", "content": "<5059004450>and now the double print fixed</5059004450>"}, {"role": "assistant", "content": "Okay"}, {"role": "user", "content": "<5059004450>excellent. i'll go ahead and commit this one</5059004450>"}]
 weak-folding-dill 2025-02-09 12:53:29,187 - INFO - response "Alright"
+unstable-boxing-cliff 2025-02-09 13:05:56,646 - DEBUG - Starting new HTTPS connection (1): huggingface.co:443
+unstable-boxing-cliff 2025-02-09 13:05:56,714 - DEBUG - https://huggingface.co:443 "HEAD /deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+unstable-boxing-cliff 2025-02-09 13:05:56,936 - DEBUG - https://huggingface.co:443 "HEAD /deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/resolve/main/config.json HTTP/1.1" 200 0
+unstable-boxing-cliff 2025-02-09 13:06:04,095 - DEBUG - https://huggingface.co:443 "HEAD /deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/resolve/main/generation_config.json HTTP/1.1" 200 0
+exceptional-sliding-iris 2025-02-09 13:06:44,507 - DEBUG - Starting new HTTPS connection (1): huggingface.co:443
+exceptional-sliding-iris 2025-02-09 13:06:44,621 - DEBUG - https://huggingface.co:443 "HEAD /deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+exceptional-sliding-iris 2025-02-09 13:06:44,824 - DEBUG - https://huggingface.co:443 "HEAD /deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/resolve/main/config.json HTTP/1.1" 200 0
+exceptional-sliding-iris 2025-02-09 13:06:48,058 - DEBUG - https://huggingface.co:443 "HEAD /deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/resolve/main/generation_config.json HTTP/1.1" 200 0
+exceptional-sliding-iris 2025-02-09 13:06:51,782 - INFO - prompt [{"role": "user", "content": "<5059004450>hello world</5059004450>"}]
+exceptional-sliding-iris 2025-02-09 13:06:52,796 - INFO - response "Okay"
+exceptional-sliding-iris 2025-02-09 13:07:25,324 - INFO - prompt [{"role": "user", "content": "<5059004450>hello world</5059004450>"}, {"role": "assistant", "content": "Okay"}, {"role": "user", "content": "<5059004450>keeping this cleaner to get more utility from llm helpers with less context</5059004450>"}]
+exceptional-sliding-iris 2025-02-09 13:07:25,885 - INFO - response "Alright"
+pungent-learning-carrot 2025-02-09 13:14:05,952 - DEBUG - Starting new HTTPS connection (1): huggingface.co:443
+pungent-learning-carrot 2025-02-09 13:14:06,027 - DEBUG - https://huggingface.co:443 "HEAD /deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+pungent-learning-carrot 2025-02-09 13:14:06,237 - DEBUG - https://huggingface.co:443 "HEAD /deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/resolve/main/config.json HTTP/1.1" 200 0
+pungent-learning-carrot 2025-02-09 13:14:13,675 - DEBUG - https://huggingface.co:443 "HEAD /deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/resolve/main/generation_config.json HTTP/1.1" 200 0
+pungent-learning-carrot 2025-02-09 13:14:17,429 - INFO - prompt [{"role": "user", "content": "<5059004450>hello world</5059004450>"}]
+fast-jumping-stork 2025-02-09 13:14:43,239 - DEBUG - Starting new HTTPS connection (1): huggingface.co:443
+fast-jumping-stork 2025-02-09 13:14:43,450 - DEBUG - https://huggingface.co:443 "HEAD /deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+fast-jumping-stork 2025-02-09 13:14:43,675 - DEBUG - https://huggingface.co:443 "HEAD /deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/resolve/main/config.json HTTP/1.1" 200 0
+fast-jumping-stork 2025-02-09 13:14:46,944 - DEBUG - https://huggingface.co:443 "HEAD /deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/resolve/main/generation_config.json HTTP/1.1" 200 0
+fast-jumping-stork 2025-02-09 13:14:51,462 - INFO - prompt [{"role": "user", "content": "<5059004450>hello world</5059004450>"}]
+fast-jumping-stork 2025-02-09 13:14:52,606 - INFO - response "Okay"
+fast-jumping-stork 2025-02-09 13:14:56,653 - INFO - prompt [{"role": "user", "content": "<5059004450>hello world</5059004450>"}, {"role": "assistant", "content": "Okay"}, {"role": "user", "content": "<5059004450>okay, so is this working?</5059004450>"}]
+fast-jumping-stork 2025-02-09 13:14:57,304 - INFO - response "Alright"
+agile-discovering-vole 2025-02-09 13:15:39,788 - DEBUG - Starting new HTTPS connection (1): huggingface.co:443
+agile-discovering-vole 2025-02-09 13:15:40,022 - DEBUG - https://huggingface.co:443 "HEAD /deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+agile-discovering-vole 2025-02-09 13:15:40,250 - DEBUG - https://huggingface.co:443 "HEAD /deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/resolve/main/config.json HTTP/1.1" 200 0
+agile-discovering-vole 2025-02-09 13:15:43,517 - DEBUG - https://huggingface.co:443 "HEAD /deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/resolve/main/generation_config.json HTTP/1.1" 200 0
+agile-discovering-vole 2025-02-09 13:15:46,420 - INFO - prompt [{"role": "user", "content": "<5059004450>check break</5059004450>"}]
+agile-discovering-vole 2025-02-09 13:15:47,466 - INFO - response "First"
+agile-discovering-vole 2025-02-09 13:15:55,205 - INFO - prompt [{"role": "user", "content": "<5059004450>check break</5059004450>"}, {"role": "assistant", "content": "First"}, {"role": "user", "content": "<5059004450>eak</5059004450>"}]
+agile-discovering-vole 2025-02-09 13:15:55,931 - INFO - response "Alright"
+silver-dwelling-warbler 2025-02-09 13:16:24,271 - DEBUG - Starting new HTTPS connection (1): huggingface.co:443
+silver-dwelling-warbler 2025-02-09 13:16:24,345 - DEBUG - https://huggingface.co:443 "HEAD /deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+silver-dwelling-warbler 2025-02-09 13:16:24,528 - DEBUG - https://huggingface.co:443 "HEAD /deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/resolve/main/config.json HTTP/1.1" 200 0
+silver-dwelling-warbler 2025-02-09 13:16:27,642 - DEBUG - https://huggingface.co:443 "HEAD /deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/resolve/main/generation_config.json HTTP/1.1" 200 0
+silver-dwelling-warbler 2025-02-09 13:16:31,256 - INFO - prompt [{"role": "user", "content": "<5059004450>hookup</5059004450>"}]
+brilliant-securing-panda 2025-02-09 13:18:26,867 - DEBUG - Starting new HTTPS connection (1): huggingface.co:443
+brilliant-securing-panda 2025-02-09 13:18:26,934 - DEBUG - https://huggingface.co:443 "HEAD /deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+brilliant-securing-panda 2025-02-09 13:18:27,126 - DEBUG - https://huggingface.co:443 "HEAD /deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/resolve/main/config.json HTTP/1.1" 200 0
+brilliant-securing-panda 2025-02-09 13:18:30,279 - DEBUG - https://huggingface.co:443 "HEAD /deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/resolve/main/generation_config.json HTTP/1.1" 200 0
+brilliant-securing-panda 2025-02-09 13:18:35,288 - INFO - prompt [{"role": "user", "content": "<5059004450>hello</5059004450>"}]
+uncertain-exploring-coyote 2025-02-09 13:18:50,339 - DEBUG - Starting new HTTPS connection (1): huggingface.co:443
+uncertain-exploring-coyote 2025-02-09 13:18:50,417 - DEBUG - https://huggingface.co:443 "HEAD /deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+uncertain-exploring-coyote 2025-02-09 13:18:50,612 - DEBUG - https://huggingface.co:443 "HEAD /deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/resolve/main/config.json HTTP/1.1" 200 0
+uncertain-exploring-coyote 2025-02-09 13:18:53,771 - DEBUG - https://huggingface.co:443 "HEAD /deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/resolve/main/generation_config.json HTTP/1.1" 200 0
+uncertain-exploring-coyote 2025-02-09 13:18:57,699 - INFO - prompt [{"role": "user", "content": "<5059004450>hello</5059004450>"}]
+ordinary-streaming-basil 2025-02-09 13:19:06,847 - DEBUG - Starting new HTTPS connection (1): huggingface.co:443
+ordinary-streaming-basil 2025-02-09 13:19:06,917 - DEBUG - https://huggingface.co:443 "HEAD /deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+ordinary-streaming-basil 2025-02-09 13:19:07,120 - DEBUG - https://huggingface.co:443 "HEAD /deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/resolve/main/config.json HTTP/1.1" 200 0
+ordinary-streaming-basil 2025-02-09 13:19:10,266 - DEBUG - https://huggingface.co:443 "HEAD /deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/resolve/main/generation_config.json HTTP/1.1" 200 0
+ordinary-streaming-basil 2025-02-09 13:19:12,943 - INFO - prompt [{"role": "user", "content": "<5059004450>test</5059004450>"}]
+old-picking-blaze 2025-02-09 13:22:47,664 - DEBUG - Starting new HTTPS connection (1): huggingface.co:443
+old-picking-blaze 2025-02-09 13:22:47,758 - DEBUG - https://huggingface.co:443 "HEAD /deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+old-picking-blaze 2025-02-09 13:22:47,957 - DEBUG - https://huggingface.co:443 "HEAD /deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/resolve/main/config.json HTTP/1.1" 200 0
+old-picking-blaze 2025-02-09 13:22:51,134 - DEBUG - https://huggingface.co:443 "HEAD /deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/resolve/main/generation_config.json HTTP/1.1" 200 0
+old-picking-blaze 2025-02-09 13:22:56,203 - INFO - prompt [{"role": "user", "content": "<5059004450>hello</5059004450>"}]
+dispensable-looking-spider 2025-02-09 13:26:01,231 - DEBUG - Starting new HTTPS connection (1): huggingface.co:443
+dispensable-looking-spider 2025-02-09 13:26:01,305 - DEBUG - https://huggingface.co:443 "HEAD /deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+dispensable-looking-spider 2025-02-09 13:26:01,518 - DEBUG - https://huggingface.co:443 "HEAD /deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/resolve/main/config.json HTTP/1.1" 200 0
+dispensable-looking-spider 2025-02-09 13:26:04,739 - DEBUG - https://huggingface.co:443 "HEAD /deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/resolve/main/generation_config.json HTTP/1.1" 200 0
+dispensable-looking-spider 2025-02-09 13:26:09,359 - INFO - prompt [{"role": "user", "content": "<5059004450>so much better</5059004450>"}]
+dispensable-looking-spider 2025-02-09 13:26:10,399 - INFO - response ""
+dispensable-looking-spider 2025-02-09 13:26:26,914 - INFO - prompt [{"role": "user", "content": "<5059004450>so much better</5059004450>"}, {"role": "assistant", "content": ""}, {"role": "user", "content": "<5059004450>maybe, lol</5059004450>"}]
+dispensable-looking-spider 2025-02-09 13:26:27,342 - INFO - response ""
+near-rowing-water 2025-02-09 13:26:36,025 - DEBUG - Starting new HTTPS connection (1): huggingface.co:443
+near-rowing-water 2025-02-09 13:26:36,099 - DEBUG - https://huggingface.co:443 "HEAD /deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+near-rowing-water 2025-02-09 13:26:36,302 - DEBUG - https://huggingface.co:443 "HEAD /deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/resolve/main/config.json HTTP/1.1" 200 0
+near-rowing-water 2025-02-09 13:26:39,562 - DEBUG - https://huggingface.co:443 "HEAD /deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/resolve/main/generation_config.json HTTP/1.1" 200 0
+near-rowing-water 2025-02-09 13:26:51,353 - INFO - prompt [{"role": "user", "content": "<5059004450>feeling dumb</5059004450>"}]
+flying-tossing-emerald 2025-02-09 13:33:52,915 - DEBUG - Starting new HTTPS connection (1): huggingface.co:443
+flying-tossing-emerald 2025-02-09 13:33:52,988 - DEBUG - https://huggingface.co:443 "HEAD /deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+flying-tossing-emerald 2025-02-09 13:33:53,238 - DEBUG - https://huggingface.co:443 "HEAD /deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/resolve/main/config.json HTTP/1.1" 200 0
+flying-tossing-emerald 2025-02-09 13:33:57,221 - DEBUG - https://huggingface.co:443 "HEAD /deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/resolve/main/generation_config.json HTTP/1.1" 200 0
+flying-tossing-emerald 2025-02-09 13:33:58,347 - INFO - prompt [{"role": "user", "content": "<5059004450>hey</5059004450>"}]
+flying-tossing-emerald 2025-02-09 13:33:59,179 - INFO - response "Okay"
+flying-tossing-emerald 2025-02-09 13:34:17,918 - INFO - prompt [{"role": "user", "content": "<5059004450>hey</5059004450>"}, {"role": "assistant", "content": "Okay"}, {"role": "user", "content": "<5059004450>so we're back. let's fix that new warning - past_key_values will be deprecated in v4.43</5059004450>"}]
+flying-tossing-emerald 2025-02-09 13:34:18,636 - INFO - response "Alright"
+flying-tossing-emerald 2025-02-09 13:36:07,373 - INFO - prompt [{"role": "user", "content": "<5059004450>hey</5059004450>"}, {"role": "assistant", "content": "Okay"}, {"role": "user", "content": "<5059004450>so we're back. let's fix that new warning - past_key_values will be deprecated in v4.43</5059004450>"}, {"role": "assistant", "content": "Alright"}, {"role": "user", "content": "<5059004450>scratch that, we'll live with it. 404 to that page and frankly i don't have the time. we'll let you solve that one when we get you running right</5059004450>"}]
+flying-tossing-emerald 2025-02-09 13:36:08,118 - INFO - response "Alright"
+flying-tossing-emerald 2025-02-09 13:36:10,096 - ERROR - Error occurred: 
