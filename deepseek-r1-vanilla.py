@@ -42,9 +42,22 @@ while True:
     logger.info("response %s", json.dumps(response))
 
     # mlx-lm just gives us the text
-    print(tokenizer.encode("hello<think></think>"))
+    # print(tokenizer.encode("hello<think></think>"))
+    breakpoint()
 
-
+    #
+    #
+    #
+    #
+    #
+    #
+    #
+    # okay, so we want to take a peek inside here to see what our model looks like
+    # and how we can access to it over each forward pass. we'll often want to make
+    # modifications to the model based on runtime characteristics, and may even
+    # encourage the model to help manage those changes.
+    # 
+    # how would we model sleep?
 
 # """
 # >>> mlx is

@@ -19,13 +19,18 @@ class GeometricExplorer:
         sample_output = self.model(mx.array([sample_ids]))
         self.hidden_size = sample_output.shape[-1]
         self.core = GeometricCore(self.hidden_size)
-        
+        if not self.core.concept_centers:
+            self.add_concept("positive", "excellent amazing wonderful")
+            self.add_concept("negative", "terrible horrible awful")
+            self.add_concept("technical", "computer software code")
+            self.add_concept("emotional", "happy sad angry love")
+
     def get_embeddings(self, text: str) -> Tuple[List[Tuple[str, int]], mx.array]:
         """Get token IDs and embeddings for text"""
         ids = self.tokenizer.encode(text)
         tokens = [(self.tokenizer.decode([id]), id) for id in ids]
         return tokens, self.model(mx.array([ids]))
-    
+
     def add_transformation(self, 
                          center: Optional[mx.array] = None,
                          direction: Optional[mx.array] = None,
@@ -47,19 +52,11 @@ class GeometricExplorer:
         """Add a concept by getting its embedding"""
         _, embeddings = self.get_embeddings(text)
         # Use mean embedding as concept center
+        breakpoint()
+
         concept_embedding = mx.mean(embeddings, axis=1)[0]
         self.core.add_concept(name, concept_embedding)
-        
-    def generate_from_embeddings(self, embeddings: mx.array) -> str:
-        """Generate text from embeddings"""
-        # Get logits from model
-        logits = self.model(embeddings)
-        # Get most likely token IDs
-        token_ids = mx.argmax(logits, axis=-1)
-        # Convert to list of ints
-        token_ids = [int(id) for id in token_ids.tolist()]
-        # Decode tokens to text
-        return self.tokenizer.decode(token_ids)
+       
 
     def explore(self, text: str):
         """Interactive exploration of transformations"""
@@ -69,11 +66,6 @@ class GeometricExplorer:
         print(f"Tokens: {tokens}")
         
         # Add some example concepts if none exist
-        if not self.core.concept_centers:
-            self.add_concept("positive", "excellent amazing wonderful")
-            self.add_concept("negative", "terrible horrible awful")
-            self.add_concept("technical", "computer software code")
-            self.add_concept("emotional", "happy sad angry love")
             
         # Show concept similarities
         print("\nConcept Analysis:")
@@ -93,8 +85,15 @@ class GeometricExplorer:
         
         # Analyze token patterns
         print("\nToken Analysis:")
+        breakpoint()
         for i, (token, token_id) in enumerate(tokens):
             print(f"{i:2d}. '{token}' (ID: {token_id})")
+            orig_embedding = embeddings[0, i]
+            trans_embedding = transformed[0, i]
+
+            similarity = mx.matmul(orig_embedding, orig_embedding) / (mx.linalg.norm(orig_embedding) * mx.linalg.norm(orig_embedding))
+            print(f"    sm: {float(similarity):.4f}")
+
             # Compare original vs transformed embeddings for this token
             orig_norm = mx.linalg.norm(embeddings[0,i])
             trans_norm = mx.linalg.norm(transformed[0,i])
@@ -109,25 +108,12 @@ class GeometricExplorer:
         # Calculate overall change
         delta = mx.linalg.norm(transformed - embeddings) / mx.linalg.norm(embeddings)
         print(f"Relative change: {delta:.2%}")
-        
-        # Generate and show transformed text
-        print("\nTransformed text:")
-        transformed_text = self.generate_from_embeddings(transformed)
-        print(transformed_text)
 
 def main():
     explorer = GeometricExplorer()
     
-    while True:
-        try:
-            text = input("\nEnter text to transform (or 'quit' to exit): ")
-            if text.lower() == 'quit':
-                break
-            explorer.explore(text)
-        except KeyboardInterrupt:
-            break
-        except Exception as e:
-            print(f"Error: {e}")
+    text = "Hello world"
+    explorer.explore(text)
 
 if __name__ == "__main__":
     main()
