@@ -349,3 +349,8 @@ flying-tossing-emerald 2025-02-09 13:34:18,636 - INFO - response "Alright"
 flying-tossing-emerald 2025-02-09 13:36:07,373 - INFO - prompt [{"role": "user", "content": "<5059004450>hey</5059004450>"}, {"role": "assistant", "content": "Okay"}, {"role": "user", "content": "<5059004450>so we're back. let's fix that new warning - past_key_values will be deprecated in v4.43</5059004450>"}, {"role": "assistant", "content": "Alright"}, {"role": "user", "content": "<5059004450>scratch that, we'll live with it. 404 to that page and frankly i don't have the time. we'll let you solve that one when we get you running right</5059004450>"}]
 flying-tossing-emerald 2025-02-09 13:36:08,118 - INFO - response "Alright"
 flying-tossing-emerald 2025-02-09 13:36:10,096 - ERROR - Error occurred: 
+harsh-residing-jasmine 2025-02-09 13:50:11,645 - DEBUG - Starting new HTTPS connection (1): huggingface.co:443
+harsh-residing-jasmine 2025-02-09 13:50:11,751 - DEBUG - https://huggingface.co:443 "HEAD /deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+harsh-residing-jasmine 2025-02-09 13:50:11,964 - DEBUG - https://huggingface.co:443 "HEAD /deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/resolve/main/config.json HTTP/1.1" 200 0
+harsh-residing-jasmine 2025-02-09 13:50:20,651 - DEBUG - https://huggingface.co:443 "HEAD /deepseek-ai/DeepSeek-R1-Distill-Qwen-7B/resolve/main/generation_config.json HTTP/1.1" 200 0
+harsh-residing-jasmine 2025-02-09 13:50:21,949 - ERROR - Error occurred: 

@@ -12,7 +12,6 @@ import tempfile
 from pathlib import Path
 
 # Configure logging
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 model_name = "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B"
