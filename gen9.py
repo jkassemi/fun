@@ -80,13 +80,33 @@ class Day1(nn.Module):
             combined_direction = combined_direction / torch.norm(combined_direction)
         return combined_direction
 
-    def forward(self, inputs):
+    def forward(self, input_ids, past_key_values=None):
         with torch.no_grad():
-            outputs = self.formless(inputs, output_hidden_states=True)
+            outputs = self.formless(
+                input_ids,
+                output_hidden_states=True,
+                use_cache=True,
+                past_key_values=past_key_values,
+            )
             prelogits = outputs.hidden_states[-1]
-            modified_prelogits = prelogits + prelogits * self.combined_direction
-            outputs.logits = self.formless.lm_head(modified_prelogits)
-            return outputs
+
+            # Correct way to get the last token index
+            last_token_index = (
+                input_ids.shape - 1
+            )  # Get the size of the 2nd dimension (sequence length) and subtract 1
+
+            last_token_prelogits = prelogits[:, last_token_index, :]  # Correct indexing
+            modified_last_token_prelogits = (
+                last_token_prelogits + last_token_prelogits * self.combined_direction
+            )
+            prelogits[:, last_token_index, :] = (
+                modified_last_token_prelogits  # Update in place
+            )
+
+            outputs.logits = self.formless.lm_head(prelogits)
+
+            past_key_values = outputs.past_key_values
+            return outputs, past_key_values
 
 
 model = Day1().to(device)
@@ -161,9 +181,9 @@ Available Tools: {json.dumps([get_json_schema(tool) for tool in tools])}<|eot_id
 try:
     # Convert initial prompt to tokens once
     print(initial_prompt)
-    current_input_ids = tokenizer(initial_prompt, return_tensors="pt", add_special_tokens=True).input_ids.to(
-        device
-    )
+    current_input_ids = tokenizer(
+        initial_prompt, return_tensors="pt", add_special_tokens=True
+    ).input_ids.to(device)
 
     while True:
         preprompt = f"<|start_header_id|>user<|end_header_id|>"
@@ -187,11 +207,12 @@ try:
 
         logger.info(tokenizer.decode(current_input_ids[0], skip_special_tokens=False))
 
+        past_key_values = None
         # Generate response
         in_tool = False
         tool_body = ""
         for _ in range(max_tokens):
-            outputs = model.forward(current_input_ids)
+            outputs, past_key_values = model.forward(current_input_ids, past_key_values)
             next_token_logits = outputs.logits[:, -1, :]
             next_token = torch.argmax(next_token_logits, dim=-1)
             current_input_ids = torch.cat(
