@@ -57,15 +57,13 @@ class Day1(nn.Module):
         self.spectrum_components.append((direction, weight))
         self.combined_direction = self.calculate_combined_direction()
 
-    def emb(self, token: str):
-        # TODO: this is super fragile to anything more than a single token
-        # will consider some sort of averaging or centering here, but we might
-        # just want to let the model work through it.
-        return self.embed_tokens(
-            tokenizer.encode(token, return_tensors="pt", add_special_tokens=False).to(
-                device
-            )
-        )[0]
+    def emb(self, text: str):
+        tokens = tokenizer.encode(text, return_tensors="pt", add_special_tokens=False).to(device)
+        embeddings = self.embed_tokens(tokens)
+        if embeddings.shape[0] > 1:  # More than one token
+            embeddings = torch.mean(embeddings, dim=0, keepdim=True) # Average embeddings
+        return embeddings[0] # Return the embedding of the (averaged) sequence
+
 
     def calculate_combined_direction(self):
         emb_dim = self.embed_tokens.weight.shape[1]
@@ -103,7 +101,7 @@ prompt_space = tokenizer(
 
 
 def get_embedding_for_token(token: str):
-    """Get the numerical token identifier for the given token
+    """Get the average embedding over the given token(s)
 
     Args:
         token: the token representation as a string
