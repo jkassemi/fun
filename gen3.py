@@ -12,6 +12,7 @@ import tempfile
 from pathlib import Path
 
 # Configure logging
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 model_name = "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B"
@@ -25,14 +26,38 @@ class Day1(nn.Module):
         self.light = nn.Linear(in_features=152064, out_features=1, bias=False)
         self.past_key_values = None
 
-    def forward(self, inputs):
+    def forward(self, inputs, target_embeddings=None):
+        # Get embeddings from the model's first layer
+        embeddings = self.formless.get_input_embeddings()(inputs)
+        
+        # If we have target embeddings, transform current embeddings
+        if target_embeddings is not None:
+            # Get sequence lengths
+            current_len = embeddings.size(1)
+            target_len = target_embeddings.size(1)
+            
+            # Pad or truncate target embeddings to match current length
+            if target_len < current_len:
+                # Pad target embeddings
+                padding = torch.zeros(1, current_len - target_len, embeddings.size(2), 
+                                   device=embeddings.device)
+                target_embeddings = torch.cat([target_embeddings, padding], dim=1)
+            elif target_len > current_len:
+                # Truncate target embeddings
+                target_embeddings = target_embeddings[:, :current_len, :]
+            
+            # Simple linear interpolation
+            embeddings = alpha * embeddings + (1 - alpha) * target_embeddings
+        
         with torch.no_grad():
             outputs = self.formless(
-                inputs, past_key_values=self.past_key_values, use_cache=True
+                inputs_embeds=embeddings,
+                past_key_values=self.past_key_values,
+                use_cache=True
             )
             # Store past key values for potential continued generation
             self.past_key_values = outputs.past_key_values
-            return outputs
+            return outputs, embeddings
 
 def main():
     # Initialize tokenizer
@@ -64,8 +89,14 @@ def main():
                 messages, tokenize=True, add_generation_prompt=True, return_tensors="pt"
             ).to(device)
             
-            # Get model outputs
-            outputs = model.forward(inputs)
+            # Store target embeddings from first run
+            if not hasattr(model, 'target_embeddings'):
+                _, current_embeddings = model.forward(inputs)
+                model.target_embeddings = current_embeddings.detach().clone()
+                print("Stored target embeddings")
+            
+            # Get model outputs with transformed embeddings
+            outputs, _ = model.forward(inputs, model.target_embeddings)
             
             # Get the logits from the last token
             next_token_logits = outputs.logits[:, -1, :]
