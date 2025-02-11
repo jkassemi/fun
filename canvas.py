@@ -242,6 +242,29 @@ def replace_section(start_index: int, end_index: int, replacement_text: str) -> 
     except Exception as e:
         return f"Error replacing section: {e}"
 
+def breakpoint_tool(code: str = "") -> str:
+    """Trigger a breakpoint, allowing for interactive model debugging/tunning
+
+    Args:
+        code: Optional Python code to execute before the breakpoint.
+
+    Returns:
+        A message indicating the breakpoint has been hit or an error message.
+    """
+    # Literally mostly just to get pdb with the model, which is available,
+    # albeit in an ugly way since this is a proof of concept
+    try:
+        if code:
+            try:
+                exec(code)  # Execute any provided code
+            except Exception as e:
+                return f"Error executing pre-breakpoint code: {e}"
+        print("Breakpoint reached. Entering interactive debugging mode.")
+        breakpoint()  # This will trigger the debugger
+        return "Breakpoint exited."  # Message after the breakpoint
+    except Exception as e:
+        return f"Error in breakpoint tool: {e}"
+
 
 tools = [
     get_embedding_for_token,
@@ -250,6 +273,7 @@ tools = [
     highest_token_probs,
     replace_message,
     replace_section,
+    breakpoint
 ]
 
 
