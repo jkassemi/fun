@@ -435,3 +435,241 @@ This will add a cosine shift of 0.5 to the white token to the black token.<|eot_
 juicy-fluttering-chestnut 2025-02-10 20:05:40,882 - INFO - <|start_header_id|>ipython<|end_header_id|>
 tensor([[-0.0222, -0.0135, -0.0075,  ...,  0.0078,  0.0231, -0.0003]],
        device='mps:0', dtype=torch.float16, grad_fn=<SelectBackward0>)<|eot_id|>
+walking-stopping-maelstrom 2025-02-10 20:25:52,618 - DEBUG - Starting new HTTPS connection (1): huggingface.co:443
+walking-stopping-maelstrom 2025-02-10 20:25:52,739 - DEBUG - https://huggingface.co:443 "HEAD /meta-llama/Llama-3.2-1B-Instruct/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+walking-stopping-maelstrom 2025-02-10 20:25:52,954 - DEBUG - https://huggingface.co:443 "HEAD /meta-llama/Llama-3.2-1B-Instruct/resolve/main/config.json HTTP/1.1" 200 0
+walking-stopping-maelstrom 2025-02-10 20:25:53,715 - DEBUG - https://huggingface.co:443 "HEAD /meta-llama/Llama-3.2-1B-Instruct/resolve/main/generation_config.json HTTP/1.1" 200 0
+walking-stopping-maelstrom 2025-02-10 20:26:31,510 - ERROR - Error occurred: argument 'ids': 'float' object cannot be interpreted as an integer
+complicated-perceiving-echidna 2025-02-10 20:27:44,350 - DEBUG - Starting new HTTPS connection (1): huggingface.co:443
+complicated-perceiving-echidna 2025-02-10 20:27:44,449 - DEBUG - https://huggingface.co:443 "HEAD /meta-llama/Llama-3.2-1B-Instruct/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+complicated-perceiving-echidna 2025-02-10 20:27:44,662 - DEBUG - https://huggingface.co:443 "HEAD /meta-llama/Llama-3.2-1B-Instruct/resolve/main/config.json HTTP/1.1" 200 0
+complicated-perceiving-echidna 2025-02-10 20:27:45,387 - DEBUG - https://huggingface.co:443 "HEAD /meta-llama/Llama-3.2-1B-Instruct/resolve/main/generation_config.json HTTP/1.1" 200 0
+complicated-perceiving-echidna 2025-02-10 20:30:07,267 - ERROR - Error occurred: 
+solid-racing-ray 2025-02-10 20:30:10,201 - DEBUG - Starting new HTTPS connection (1): huggingface.co:443
+solid-racing-ray 2025-02-10 20:30:10,275 - DEBUG - https://huggingface.co:443 "HEAD /meta-llama/Llama-3.2-1B-Instruct/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+solid-racing-ray 2025-02-10 20:30:10,585 - DEBUG - https://huggingface.co:443 "HEAD /meta-llama/Llama-3.2-1B-Instruct/resolve/main/config.json HTTP/1.1" 200 0
+solid-racing-ray 2025-02-10 20:30:11,457 - DEBUG - https://huggingface.co:443 "HEAD /meta-llama/Llama-3.2-1B-Instruct/resolve/main/generation_config.json HTTP/1.1" 200 0
+solid-racing-ray 2025-02-10 20:30:45,080 - INFO - 2024
+<|begin_of_text|><|start_header_id|>system<|end_header_id|>
+
+Environment: ipython
+Today Date: 10 Feb 2025
+
+Should you choose to call a tool, only call one at a time.
+Put them in the following format with no other content:
+
+Here is a list of functions in JSON format you can invoke:
+{"type": "function", "function": {"name": "get_embedding_for_token", "description": "Get the numerical token identifier for the given token", "parameters": {"type": "object", "properties": {"token": {"type": "string", "description": "the token representation as a string"}}, "required": ["token"]}}} {"type": "function", "function": {"name": "add_vector_shift", "description": "Adds embedding space vector shift to your internal preclassifier layer\n\nYou can use this to change your perception at runtime.", "parameters": {"type": "object", "properties": {"start_token": {"type": "string", "description": "a single token to define the starting point of the vector"}, "end_token": {"type": "string", "description": "a single token to define the ending point of the vector"}, "weight": {"type": "integer", "description": "the weight to be applied to the transformation: 0-100"}}, "required": ["start_token", "end_token"]}}} {"type": "function", "function": {"name": "add_cosine_shift", "description": "Adds cosine vector shift to your internal preclassifier layer\n\nYou can use this to change your perception at runtime.", "parameters": {"type": "object", "properties": {"start_token": {"type": "string", "description": "a single token to define the starting point of the vector"}, "end_token": {"type": "string", "description": "a single token to define the ending point of the vector"}, "weight": {"type": "integer", "description": "the weight to be applied to the transformation: 0-100"}}, "required": ["start_token", "end_token"]}}} {"type": "function", "function": {"name": "highest_token_probs", "description": "Return a list of the top `k` most likely tokens to follow `following_token`\ngiven the current context\n\nYou can use this to test your perception at runtime. Preceding conversation\ncontext will also impact scoring, so interpret accordingly.", "parameters": {"type": "object", "properties": {"following_token": {"type": "string", "description": "given this token, what are the most likely tokens to follow?"}, "k": {"type": "integer", "description": "the number of tokens to return"}}, "required": ["following_token"]}}}
+
+Here is how you can invoke a tool named `toolname`:
+{"name": "toolname", "parameters": {"numberParam": 0.5, "stringParam": "mystring"}}
+<|eot_id|>
+hello<|begin_of_text|><|eot_id|><|start_header_id|>assistant<|end_header_id|>
+solid-racing-ray 2025-02-10 20:30:56,059 - INFO - <|start_header_id|>ipython<|end_header_id|>
+error: unknown tool highest_token_probs<|eot_id|>
+solid-racing-ray 2025-02-10 20:31:40,442 - ERROR - Error occurred: 
+expert-destroying-ash 2025-02-10 20:36:52,852 - DEBUG - Starting new HTTPS connection (1): huggingface.co:443
+expert-destroying-ash 2025-02-10 20:36:52,978 - DEBUG - https://huggingface.co:443 "HEAD /meta-llama/Llama-3.2-1B-Instruct/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+expert-destroying-ash 2025-02-10 20:36:53,202 - DEBUG - https://huggingface.co:443 "HEAD /meta-llama/Llama-3.2-1B-Instruct/resolve/main/config.json HTTP/1.1" 200 0
+expert-destroying-ash 2025-02-10 20:36:53,982 - DEBUG - https://huggingface.co:443 "HEAD /meta-llama/Llama-3.2-1B-Instruct/resolve/main/generation_config.json HTTP/1.1" 200 0
+expert-destroying-ash 2025-02-10 20:37:00,013 - INFO - 2024
+<|begin_of_text|><|start_header_id|>system<|end_header_id|>
+
+Environment: ipython
+Today Date: 10 Feb 2025
+
+Should you choose to call a tool, only call one at a time.
+Put them in the following format with no other content:
+
+Here is a list of functions in JSON format you can invoke:
+{"type": "function", "function": {"name": "get_embedding_for_token", "description": "Get the numerical token identifier for the given token", "parameters": {"type": "object", "properties": {"token": {"type": "string", "description": "the token representation as a string"}}, "required": ["token"]}}} {"type": "function", "function": {"name": "add_vector_shift", "description": "Adds embedding space vector shift to your internal preclassifier layer\n\nYou can use this to change your perception at runtime.", "parameters": {"type": "object", "properties": {"start_token": {"type": "string", "description": "a single token to define the starting point of the vector"}, "end_token": {"type": "string", "description": "a single token to define the ending point of the vector"}, "weight": {"type": "integer", "description": "the weight to be applied to the transformation: 0-100"}}, "required": ["start_token", "end_token"]}}} {"type": "function", "function": {"name": "add_cosine_shift", "description": "Adds cosine vector shift to your internal preclassifier layer\n\nYou can use this to change your perception at runtime.", "parameters": {"type": "object", "properties": {"start_token": {"type": "string", "description": "a single token to define the starting point of the vector"}, "end_token": {"type": "string", "description": "a single token to define the ending point of the vector"}, "weight": {"type": "integer", "description": "the weight to be applied to the transformation: 0-100"}}, "required": ["start_token", "end_token"]}}} {"type": "function", "function": {"name": "highest_token_probs", "description": "Return a list of the top `k` most likely tokens to follow `following_token`\ngiven the current context\n\nYou can use this to test your perception at runtime. Preceding conversation\ncontext will also impact scoring, so interpret accordingly.", "parameters": {"type": "object", "properties": {"following_token": {"type": "string", "description": "given this token, what are the most likely tokens to follow?"}, "k": {"type": "integer", "description": "the number of tokens to return"}}, "required": ["following_token"]}}}
+
+Here is how you can invoke a tool named `toolname`:
+{"name": "toolname", "parameters": {"numberParam": 0.5, "stringParam": "mystring"}}
+<|eot_id|>
+hello<|begin_of_text|><|eot_id|><|start_header_id|>assistant<|end_header_id|>
+expert-destroying-ash 2025-02-10 20:37:11,068 - ERROR - Tool execution failed: topk(): argument 'k' (position 2) must be int, not str
+Traceback:
+Traceback (most recent call last):
+  File "/Users/james/code/fun/gen9.py", line 264, in <module>
+    result = f(**tool_call["parameters"])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/james/code/fun/gen9.py", line 177, in highest_token_probs
+    topk_probs, topk_indices = torch.topk(probs, k)
+                               ^^^^^^^^^^^^^^^^^^^^
+TypeError: topk(): argument 'k' (position 2) must be int, not str
+
+expert-destroying-ash 2025-02-10 20:37:11,277 - INFO - <|start_header_id|>ipython<|end_header_id|>
+tool call error: topk(): argument 'k' (position 2) must be int, not str<|eot_id|>
+expert-destroying-ash 2025-02-10 20:38:24,112 - ERROR - Error occurred: 
+quiet-ascending-ozone 2025-02-10 20:38:31,844 - DEBUG - Starting new HTTPS connection (1): huggingface.co:443
+quiet-ascending-ozone 2025-02-10 20:38:32,063 - DEBUG - https://huggingface.co:443 "HEAD /meta-llama/Llama-3.2-1B-Instruct/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+quiet-ascending-ozone 2025-02-10 20:38:32,294 - DEBUG - https://huggingface.co:443 "HEAD /meta-llama/Llama-3.2-1B-Instruct/resolve/main/config.json HTTP/1.1" 200 0
+quiet-ascending-ozone 2025-02-10 20:38:33,800 - DEBUG - https://huggingface.co:443 "HEAD /meta-llama/Llama-3.2-1B-Instruct/resolve/main/generation_config.json HTTP/1.1" 200 0
+quiet-ascending-ozone 2025-02-10 20:39:38,302 - INFO - 2024
+<|begin_of_text|><|start_header_id|>system<|end_header_id|>
+
+Environment: ipython
+Today Date: 10 Feb 2025
+
+Should you choose to call a tool, only call one at a time.
+Put them in the following format with no other content:
+
+Here is a list of functions in JSON format you can invoke:
+{"type": "function", "function": {"name": "get_embedding_for_token", "description": "Get the numerical token identifier for the given token", "parameters": {"type": "object", "properties": {"token": {"type": "string", "description": "the token representation as a string"}}, "required": ["token"]}}} {"type": "function", "function": {"name": "add_vector_shift", "description": "Adds embedding space vector shift to your internal preclassifier layer\n\nYou can use this to change your perception at runtime.", "parameters": {"type": "object", "properties": {"start_token": {"type": "string", "description": "a single token to define the starting point of the vector"}, "end_token": {"type": "string", "description": "a single token to define the ending point of the vector"}, "weight": {"type": "integer", "description": "the weight to be applied to the transformation: 0-100"}}, "required": ["start_token", "end_token"]}}} {"type": "function", "function": {"name": "add_cosine_shift", "description": "Adds cosine vector shift to your internal preclassifier layer\n\nYou can use this to change your perception at runtime.", "parameters": {"type": "object", "properties": {"start_token": {"type": "string", "description": "a single token to define the starting point of the vector"}, "end_token": {"type": "string", "description": "a single token to define the ending point of the vector"}, "weight": {"type": "integer", "description": "the weight to be applied to the transformation: 0-100"}}, "required": ["start_token", "end_token"]}}} {"type": "function", "function": {"name": "highest_token_probs", "description": "Return a list of the top `k` most likely tokens to follow `following_token`\ngiven the current context\n\nYou can use this to test your perception at runtime. Preceding conversation\ncontext will also impact scoring, so interpret accordingly.", "parameters": {"type": "object", "properties": {"following_token": {"type": "string", "description": "given this token, what are the most likely tokens to follow?"}, "k": {"type": "integer", "description": "the number of tokens to return"}}, "required": ["following_token"]}}}
+
+Here is how you can invoke a tool named `toolname`:
+{"name": "toolname", "parameters": {"numberParam": 0.5, "stringParam": "mystring"}}
+<|eot_id|>
+hi! you've been given a few tools you can use to self-reflect. they give you internal access to the weights of the llm that you're built on top of. compile a plan on how you'll test their influence.<|begin_of_text|><|eot_id|><|start_header_id|>assistant<|end_header_id|>
+quiet-ascending-ozone 2025-02-10 20:39:50,540 - INFO - <|start_header_id|>ipython<|end_header_id|>
+[('<|start_header_id|>', 1.0), ('<|end_header_id|>', 2.3245811462402344e-06), ('<|eot_id|>', 1.0728836059570312e-06), ('assistant', 5.364418029785156e-07), ('<|python_tag|>', 4.76837158203125e-07), ('`.`', 4.172325134277344e-07), ('<|eom_id|>', 4.172325134277344e-07), ('`=', 1.7881393432617188e-07), ('SGlobal', 5.960464477539063e-08), ('entialAction', 5.960464477539063e-08)]<|eot_id|>
+quiet-ascending-ozone 2025-02-10 20:41:35,430 - ERROR - Tool execution failed: get_embedding_for_token() got an unexpected keyword argument 'numberParam'
+Traceback:
+Traceback (most recent call last):
+  File "/Users/james/code/fun/gen9.py", line 265, in <module>
+    result = f(**tool_call["parameters"])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: get_embedding_for_token() got an unexpected keyword argument 'numberParam'
+
+quiet-ascending-ozone 2025-02-10 20:41:35,895 - INFO - <|start_header_id|>ipython<|end_header_id|>
+tool call error: get_embedding_for_token() got an unexpected keyword argument 'numberParam'<|eot_id|>
+quiet-ascending-ozone 2025-02-10 20:45:11,742 - INFO - <|start_header_id|>ipython<|end_header_id|>
+error: unknown tool get_embedding<|eot_id|>
+quiet-ascending-ozone 2025-02-10 20:46:47,057 - ERROR - Error occurred: 
+golden-preparing-pea 2025-02-10 20:51:17,643 - DEBUG - Starting new HTTPS connection (1): huggingface.co:443
+golden-preparing-pea 2025-02-10 20:51:17,729 - DEBUG - https://huggingface.co:443 "HEAD /meta-llama/Llama-3.2-1B-Instruct/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+golden-preparing-pea 2025-02-10 20:51:17,966 - DEBUG - https://huggingface.co:443 "HEAD /meta-llama/Llama-3.2-1B-Instruct/resolve/main/config.json HTTP/1.1" 200 0
+golden-preparing-pea 2025-02-10 20:51:19,543 - DEBUG - https://huggingface.co:443 "HEAD /meta-llama/Llama-3.2-1B-Instruct/resolve/main/generation_config.json HTTP/1.1" 200 0
+golden-preparing-pea 2025-02-10 20:51:23,156 - INFO - 2024
+<|begin_of_text|><|start_header_id|>system<|end_header_id|>
+
+Environment: ipython
+Today Date: 10 Feb 2025
+
+Should you choose to call a tool, only call one at a time.
+Put them in the following format with no other content:
+
+Here is a list of functions in JSON format you can invoke:
+{"type": "function", "function": {"name": "get_embedding_for_token", "description": "Get the numerical token identifier for the given token", "parameters": {"type": "object", "properties": {"token": {"type": "string", "description": "the token representation as a string"}}, "required": ["token"]}}} {"type": "function", "function": {"name": "add_vector_shift", "description": "Adds embedding space vector shift to your internal preclassifier layer\n\nYou can use this to change your perception at runtime.", "parameters": {"type": "object", "properties": {"start_token": {"type": "string", "description": "a single token to define the starting point of the vector"}, "end_token": {"type": "string", "description": "a single token to define the ending point of the vector"}, "weight": {"type": "integer", "description": "the weight to be applied to the transformation: 0-100"}}, "required": ["start_token", "end_token"]}}} {"type": "function", "function": {"name": "add_cosine_shift", "description": "Adds cosine vector shift to your internal preclassifier layer\n\nYou can use this to change your perception at runtime.", "parameters": {"type": "object", "properties": {"start_token": {"type": "string", "description": "a single token to define the starting point of the vector"}, "end_token": {"type": "string", "description": "a single token to define the ending point of the vector"}, "weight": {"type": "integer", "description": "the weight to be applied to the transformation: 0-100"}}, "required": ["start_token", "end_token"]}}} {"type": "function", "function": {"name": "highest_token_probs", "description": "Return a list of the top `k` most likely tokens to follow `following_token`\ngiven the current context\n\nYou can use this to test your perception at runtime. Preceding conversation\ncontext will also impact scoring, so interpret accordingly.", "parameters": {"type": "object", "properties": {"following_token": {"type": "string", "description": "given this token, what are the most likely tokens to follow?"}, "k": {"type": "integer", "description": "the number of tokens to return"}}, "required": ["following_token"]}}}
+
+Here is how you can invoke a tool named `toolname`:
+{"name": "toolname", "parameters": {"numberParam": 0.5, "stringParam": "mystring"}}
+<|eot_id|>
+hi! you've been given a few tools you can use to self-reflect. they give you internal access to the weights of the llm that you're built on top of. compile a plan on how you'll test their influence.<|begin_of_text|><|eot_id|><|start_header_id|>assistant<|end_header_id|>
+golden-preparing-pea 2025-02-10 20:51:36,119 - INFO - <|start_header_id|>ipython<|end_header_id|>
+[('start_header_id', 1.0), ('end_header_id', 2.3245811462402344e-06), ('eot_id', 1.0728836059570312e-06), ('assistant', 5.364418029785156e-07), ('python_tag', 4.76837158203125e-07), ('`.`', 4.172325134277344e-07), ('eom_id', 4.172325134277344e-07), ('`=', 1.7881393432617188e-07), ('SGlobal', 5.960464477539063e-08), ('entialAction', 5.960464477539063e-08)]<|eot_id|>
+golden-preparing-pea 2025-02-10 20:54:54,783 - INFO - 2024
+<|begin_of_text|><|start_header_id|>system<|end_header_id|>
+
+Environment: ipython
+Today Date: 10 Feb 2025
+
+Should you choose to call a tool, only call one at a time.
+Put them in the following format with no other content:
+
+Here is a list of functions in JSON format you can invoke:
+{"type": "function", "function": {"name": "get_embedding_for_token", "description": "Get the numerical token identifier for the given token", "parameters": {"type": "object", "properties": {"token": {"type": "string", "description": "the token representation as a string"}}, "required": ["token"]}}} {"type": "function", "function": {"name": "add_vector_shift", "description": "Adds embedding space vector shift to your internal preclassifier layer\n\nYou can use this to change your perception at runtime.", "parameters": {"type": "object", "properties": {"start_token": {"type": "string", "description": "a single token to define the starting point of the vector"}, "end_token": {"type": "string", "description": "a single token to define the ending point of the vector"}, "weight": {"type": "integer", "description": "the weight to be applied to the transformation: 0-100"}}, "required": ["start_token", "end_token"]}}} {"type": "function", "function": {"name": "add_cosine_shift", "description": "Adds cosine vector shift to your internal preclassifier layer\n\nYou can use this to change your perception at runtime.", "parameters": {"type": "object", "properties": {"start_token": {"type": "string", "description": "a single token to define the starting point of the vector"}, "end_token": {"type": "string", "description": "a single token to define the ending point of the vector"}, "weight": {"type": "integer", "description": "the weight to be applied to the transformation: 0-100"}}, "required": ["start_token", "end_token"]}}} {"type": "function", "function": {"name": "highest_token_probs", "description": "Return a list of the top `k` most likely tokens to follow `following_token`\ngiven the current context\n\nYou can use this to test your perception at runtime. Preceding conversation\ncontext will also impact scoring, so interpret accordingly.", "parameters": {"type": "object", "properties": {"following_token": {"type": "string", "description": "given this token, what are the most likely tokens to follow?"}, "k": {"type": "integer", "description": "the number of tokens to return"}}, "required": ["following_token"]}}}
+
+Here is how you can invoke a tool named `toolname`:
+{"name": "toolname", "parameters": {"numberParam": 0.5, "stringParam": "mystring"}}
+<|eot_id|>
+hi! you've been given a few tools you can use to self-reflect. they give you internal access to the weights of the llm that you're built on top of. compile a plan on how you'll test their influence.<|begin_of_text|><|eot_id|><|start_header_id|>assistant<|end_header_id|>
+
+<|python_tag|>{"type": "function", "name": "highest_token_probs", "parameters": {"following_token": "toolname", "k": "10"}}<|eom_id|><|start_header_id|>ipython<|end_header_id|>
+[('start_header_id', 1.0), ('end_header_id', 2.3245811462402344e-06), ('eot_id', 1.0728836059570312e-06), ('assistant', 5.364418029785156e-07), ('python_tag', 4.76837158203125e-07), ('`.`', 4.172325134277344e-07), ('eom_id', 4.172325134277344e-07), ('`=', 1.7881393432617188e-07), ('SGlobal', 5.960464477539063e-08), ('entialAction', 5.960464477539063e-08)]<|eot_id|><|start_header_id|>assistant<|end_header_id|>
+
+This output shows the top 10 most likely tokens to follow the given token "toolname" in the context of the current conversation. The output is in the format of a list of tuples, where each tuple contains the token, its probability, and its position in the conversation.
+
+To use this information, you can iterate over the list and print the tokens and their probabilities. For example:
+
+```
+for token, prob in highest_token_probs('toolname', 10):
+    print(f'Token: {token}, Probability: {prob}')
+```
+
+This will print the top 10 most likely tokens to follow "toolname" with their probabilities.<|eot_id|>cosine shift from python to rust 100<|begin_of_text|><|eot_id|><|start_header_id|>assistant<|end_header_id|>
+golden-preparing-pea 2025-02-10 20:56:53,312 - INFO - <|start_header_id|>ipython<|end_header_id|>
+None<|eot_id|>
+golden-preparing-pea 2025-02-10 21:01:00,314 - ERROR - Error occurred: 
+flying-clustering-shark 2025-02-10 21:04:18,960 - DEBUG - Starting new HTTPS connection (1): huggingface.co:443
+flying-clustering-shark 2025-02-10 21:04:19,273 - DEBUG - https://huggingface.co:443 "HEAD /meta-llama/Llama-3.2-1B-Instruct/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+flying-clustering-shark 2025-02-10 21:04:19,516 - DEBUG - https://huggingface.co:443 "HEAD /meta-llama/Llama-3.2-1B-Instruct/resolve/main/config.json HTTP/1.1" 200 0
+flying-clustering-shark 2025-02-10 21:04:21,088 - DEBUG - https://huggingface.co:443 "HEAD /meta-llama/Llama-3.2-1B-Instruct/resolve/main/generation_config.json HTTP/1.1" 200 0
+flying-clustering-shark 2025-02-10 21:04:21,152 - ERROR - Error occurred: ("Couldn't parse this type hint, likely due to a custom class or object: ", typing.Literal[True])
+smooth-subtracting-anise 2025-02-10 21:05:16,468 - DEBUG - Starting new HTTPS connection (1): huggingface.co:443
+smooth-subtracting-anise 2025-02-10 21:05:16,592 - DEBUG - https://huggingface.co:443 "HEAD /meta-llama/Llama-3.2-1B-Instruct/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+smooth-subtracting-anise 2025-02-10 21:05:16,873 - DEBUG - https://huggingface.co:443 "HEAD /meta-llama/Llama-3.2-1B-Instruct/resolve/main/config.json HTTP/1.1" 200 0
+smooth-subtracting-anise 2025-02-10 21:05:17,632 - DEBUG - https://huggingface.co:443 "HEAD /meta-llama/Llama-3.2-1B-Instruct/resolve/main/generation_config.json HTTP/1.1" 200 0
+smooth-subtracting-anise 2025-02-10 21:05:31,266 - INFO - 2024
+<|begin_of_text|><|start_header_id|>system<|end_header_id|>
+
+Environment: ipython
+Today Date: 10 Feb 2025
+
+Should you choose to call a tool, only call one at a time.
+Put them in the following format with no other content:
+
+Here is a list of functions in JSON format you can invoke:
+{"type": "function", "function": {"name": "get_embedding_for_token", "description": "Get the numerical token identifier for the given token", "parameters": {"type": "object", "properties": {"token": {"type": "string", "description": "the token representation as a string"}}, "required": ["token"]}}} {"type": "function", "function": {"name": "add_vector_shift", "description": "Adds embedding space vector shift to your internal preclassifier layer\n\nYou can use this to change your perception at runtime.", "parameters": {"type": "object", "properties": {"start_token": {"type": "string", "description": "a single token to define the starting point of the vector"}, "end_token": {"type": "string", "description": "a single token to define the ending point of the vector"}, "weight": {"type": "number", "description": "the weight to be applied to the transformation: 0-100"}}, "required": ["start_token", "end_token"]}, "return": {"type": "boolean"}}} {"type": "function", "function": {"name": "add_cosine_shift", "description": "Adds cosine vector shift to your internal preclassifier layer\n\nYou can use this to change your perception at runtime.", "parameters": {"type": "object", "properties": {"start_token": {"type": "string", "description": "a single token to define the starting point of the vector"}, "end_token": {"type": "string", "description": "a single token to define the ending point of the vector"}, "weight": {"type": "number", "description": "the weight to be applied to the transformation: 0-100"}}, "required": ["start_token", "end_token"]}, "return": {"type": "boolean"}}} {"type": "function", "function": {"name": "highest_token_probs", "description": "Return a list of the top `k` most likely tokens to follow `following_token`\ngiven the current context\n\nYou can use this to test your perception at runtime. Preceding conversation\ncontext will also impact scoring, so interpret accordingly.", "parameters": {"type": "object", "properties": {"following": {"type": "string", "description": "the input string the expected token will follow"}, "k": {"type": "integer", "description": "the number of possible tokens to return"}}, "required": ["following"]}, "return": {"type": "array", "items": {"type": "array", "prefixItems": [{"type": "string"}, {"type": "number"}]}}}}
+
+Here is how you can invoke a tool named `toolname`:
+{"name": "toolname", "parameters": {"numberParam": 0.5, "stringParam": "mystring"}}
+<|eot_id|>
+<|start_header_id|>user<|end_header_id|>hello :) what about yourself would you like to explore?<|begin_of_text|><|eot_id|><|start_header_id|>assistant<|end_header_id|>
+dynamic-educating-mint 2025-02-10 21:09:20,586 - DEBUG - Starting new HTTPS connection (1): huggingface.co:443
+dynamic-educating-mint 2025-02-10 21:09:20,693 - DEBUG - https://huggingface.co:443 "HEAD /meta-llama/Llama-3.2-1B-Instruct/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+dynamic-educating-mint 2025-02-10 21:09:20,902 - DEBUG - https://huggingface.co:443 "HEAD /meta-llama/Llama-3.2-1B-Instruct/resolve/main/config.json HTTP/1.1" 200 0
+dynamic-educating-mint 2025-02-10 21:09:22,450 - DEBUG - https://huggingface.co:443 "HEAD /meta-llama/Llama-3.2-1B-Instruct/resolve/main/generation_config.json HTTP/1.1" 200 0
+dynamic-educating-mint 2025-02-10 21:09:35,136 - INFO - 2024
+<|begin_of_text|><|start_header_id|>system<|end_header_id|>
+
+Environment: ipython
+Today Date: 10 Feb 2025
+
+Should you choose to call a tool, only call one at a time.
+Put them in the following format with no other content:
+
+Here is a list of functions in JSON format you can invoke:
+{"type": "function", "function": {"name": "get_embedding_for_token", "description": "Get the numerical token identifier for the given token", "parameters": {"type": "object", "properties": {"token": {"type": "string", "description": "the token representation as a string"}}, "required": ["token"]}}} {"type": "function", "function": {"name": "add_vector_shift", "description": "Adds embedding space vector shift to your internal preclassifier layer\n\nYou can use this to change your perception at runtime.", "parameters": {"type": "object", "properties": {"start_token": {"type": "string", "description": "a single token to define the starting point of the vector"}, "end_token": {"type": "string", "description": "a single token to define the ending point of the vector"}, "weight": {"type": "number", "description": "the weight to be applied to the transformation: 0-100"}}, "required": ["start_token", "end_token"]}, "return": {"type": "boolean"}}} {"type": "function", "function": {"name": "add_cosine_shift", "description": "Adds cosine vector shift to your internal preclassifier layer\n\nYou can use this to change your perception at runtime.", "parameters": {"type": "object", "properties": {"start_token": {"type": "string", "description": "a single token to define the starting point of the vector"}, "end_token": {"type": "string", "description": "a single token to define the ending point of the vector"}, "weight": {"type": "number", "description": "the weight to be applied to the transformation: 0-100"}}, "required": ["start_token", "end_token"]}, "return": {"type": "boolean"}}} {"type": "function", "function": {"name": "highest_token_probs", "description": "Return a list of the top `k` most likely tokens to follow `following_token`\ngiven the current context\n\nYou can use this to test your perception at runtime. Preceding conversation\ncontext will also impact scoring, so interpret accordingly.", "parameters": {"type": "object", "properties": {"following": {"type": "string", "description": "the input string the expected token will follow"}, "k": {"type": "integer", "description": "the number of possible tokens to return"}}, "required": ["following"]}, "return": {"type": "array", "items": {"type": "array", "prefixItems": [{"type": "string"}, {"type": "number"}]}}}}
+
+Here is how you can invoke a tool named `toolname`:
+{"name": "toolname", "parameters": {"numberParam": 0.5, "stringParam": "mystring"}}
+<|eot_id|>
+<|start_header_id|>user<|end_header_id|>lets set ground to sky cos similarity at 50<|begin_of_text|><|eot_id|><|start_header_id|>assistant<|end_header_id|>
+dynamic-educating-mint 2025-02-10 21:09:50,378 - INFO - <|start_header_id|>ipython<|end_header_id|>
+True<|eot_id|>
+dynamic-educating-mint 2025-02-10 21:10:43,125 - INFO - 2024
+<|begin_of_text|><|start_header_id|>system<|end_header_id|>
+
+Environment: ipython
+Today Date: 10 Feb 2025
+
+Should you choose to call a tool, only call one at a time.
+Put them in the following format with no other content:
+
+Here is a list of functions in JSON format you can invoke:
+{"type": "function", "function": {"name": "get_embedding_for_token", "description": "Get the numerical token identifier for the given token", "parameters": {"type": "object", "properties": {"token": {"type": "string", "description": "the token representation as a string"}}, "required": ["token"]}}} {"type": "function", "function": {"name": "add_vector_shift", "description": "Adds embedding space vector shift to your internal preclassifier layer\n\nYou can use this to change your perception at runtime.", "parameters": {"type": "object", "properties": {"start_token": {"type": "string", "description": "a single token to define the starting point of the vector"}, "end_token": {"type": "string", "description": "a single token to define the ending point of the vector"}, "weight": {"type": "number", "description": "the weight to be applied to the transformation: 0-100"}}, "required": ["start_token", "end_token"]}, "return": {"type": "boolean"}}} {"type": "function", "function": {"name": "add_cosine_shift", "description": "Adds cosine vector shift to your internal preclassifier layer\n\nYou can use this to change your perception at runtime.", "parameters": {"type": "object", "properties": {"start_token": {"type": "string", "description": "a single token to define the starting point of the vector"}, "end_token": {"type": "string", "description": "a single token to define the ending point of the vector"}, "weight": {"type": "number", "description": "the weight to be applied to the transformation: 0-100"}}, "required": ["start_token", "end_token"]}, "return": {"type": "boolean"}}} {"type": "function", "function": {"name": "highest_token_probs", "description": "Return a list of the top `k` most likely tokens to follow `following_token`\ngiven the current context\n\nYou can use this to test your perception at runtime. Preceding conversation\ncontext will also impact scoring, so interpret accordingly.", "parameters": {"type": "object", "properties": {"following": {"type": "string", "description": "the input string the expected token will follow"}, "k": {"type": "integer", "description": "the number of possible tokens to return"}}, "required": ["following"]}, "return": {"type": "array", "items": {"type": "array", "prefixItems": [{"type": "string"}, {"type": "number"}]}}}}
+
+Here is how you can invoke a tool named `toolname`:
+{"name": "toolname", "parameters": {"numberParam": 0.5, "stringParam": "mystring"}}
+<|eot_id|>
+<|start_header_id|>user<|end_header_id|>lets set ground to sky cos similarity at 50<|begin_of_text|><|eot_id|><|start_header_id|>assistant<|end_header_id|>
+
+<|python_tag|>{"type": "function", "name": "add_cosine_shift", "parameters": {"start_token": "ground", "end_token": "sky", "weight": "50"}}<|eom_id|><|start_header_id|>ipython<|end_header_id|>
+True<|eot_id|><|start_header_id|>assistant<|end_header_id|>
+
+This will add a cosine vector shift of 50 to the internal preclassifier layer, setting the ground to sky as the starting point and sky as the ending point.<|eot_id|><|start_header_id|>user<|end_header_id|>let's get the highest token probs following "the sky is "<|begin_of_text|><|eot_id|><|start_header_id|>assistant<|end_header_id|>
+dynamic-educating-mint 2025-02-10 21:11:01,718 - ERROR - Tool execution failed: Sizes of tensors must match except in dimension 0. Expected size 826 but got size 4 for tensor number 1 in the list.
+Traceback:
+Traceback (most recent call last):
+  File "/Users/james/code/fun/gen9.py", line 285, in <module>
+    result = f(**tool_call["parameters"])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/james/code/fun/gen9.py", line 187, in highest_token_probs
+    outputs, _ = model.forward(torch.cat([prompt_space, following]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Sizes of tensors must match except in dimension 0. Expected size 826 but got size 4 for tensor number 1 in the list.
+
+dynamic-educating-mint 2025-02-10 21:11:01,735 - INFO - <|start_header_id|>ipython<|end_header_id|>
+tool call error: Sizes of tensors must match except in dimension 0. Expected size 826 but got size 4 for tensor number 1 in the list.<|eot_id|>
