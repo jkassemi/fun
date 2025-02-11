@@ -10,6 +10,7 @@ import torch.nn.functional as F
 
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from transformers.utils import get_json_schema
+
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -58,12 +59,15 @@ class Day1(nn.Module):
         self.combined_direction = self.calculate_combined_direction()
 
     def emb(self, text: str):
-        tokens = tokenizer.encode(text, return_tensors="pt", add_special_tokens=False).to(device)
+        tokens = tokenizer.encode(
+            text, return_tensors="pt", add_special_tokens=False
+        ).to(device)
         embeddings = self.embed_tokens(tokens)
         if embeddings.shape[0] > 1:  # More than one token
-            embeddings = torch.mean(embeddings, dim=0, keepdim=True) # Average embeddings
-        return embeddings[0] # Return the embedding of the (averaged) sequence
-
+            embeddings = torch.mean(
+                embeddings, dim=0, keepdim=True
+            )  # Average embeddings
+        return embeddings[0]  # Return the embedding of the (averaged) sequence
 
     def calculate_combined_direction(self):
         emb_dim = self.embed_tokens.weight.shape[1]
@@ -109,9 +113,7 @@ def get_embedding_for_token(token: str):
     return model.emb(token)
 
 
-def add_vector_shift(
-    start_token: str, end_token: str, weight: float = 50.0
-) -> bool:
+def add_vector_shift(start_token: str, end_token: str, weight: float = 50.0) -> bool:
     """Adds embedding space vector shift to your internal preclassifier layer
 
     You can use this to change your perception at runtime.
@@ -119,13 +121,8 @@ def add_vector_shift(
     Args:
         start_token: a single token to define the starting point of the vector
         end_token: a single token to define the ending point of the vector
-        weight: the weight to be applied to the transformation: 0-100
+        weight: the weight to be applied to the transformation
     """
-    if float(weight) < 0:
-        raise ValueError("must be greater than or equal to 0")
-    if float(weight) > 100:
-        raise ValueError("cannot be more than 100")
-
     weight = float(weight) / 100.0
 
     start_emb = model.emb(start_token)
@@ -135,9 +132,7 @@ def add_vector_shift(
     return True
 
 
-def add_cosine_shift(
-    start_token: str, end_token: str, weight: float = 50.0
-) -> bool:
+def add_cosine_shift(start_token: str, end_token: str, weight: float = 50.0) -> bool:
     """Adds cosine vector shift to your internal preclassifier layer
 
     You can use this to change your perception at runtime.
@@ -145,13 +140,8 @@ def add_cosine_shift(
     Args:
         start_token: a single token to define the starting point of the vector
         end_token: a single token to define the ending point of the vector
-        weight: the weight to be applied to the transformation: 0-100
+        weight: the weight to be applied to the transformation
     """
-    if float(weight) < 0:
-        raise ValueError("must be greater than or equal to 0")
-    if float(weight) > 100:
-        raise ValueError("cannot be more than 100")
-
     weight = float(weight) / 100.0
 
     start_emb = model.emb(start_token)
@@ -193,11 +183,73 @@ def highest_token_probs(following: str, k: int = 10) -> list[tuple[str, float]]:
     return predictions
 
 
+def replace_message(message_index: int, replacement_text: str) -> str:
+    """Replaces a message in the conversation history.
+
+    Args:
+        message_index: The index of the message to replace (0-indexed).
+        replacement_text: The text to replace the message with.
+
+    Returns:
+        A success message or an error message.
+    """
+    global prompt_space_decoded
+    global prompt_space
+
+    try:
+        messages = prompt_space_decoded.split("<|eom_id|>")
+        if 0 <= message_index < len(messages):
+            replaced_message = messages[message_index]
+            messages[message_index] = replacement_text  # Replace the message
+            prompt_space_decoded = "<|eom_id|>".join(messages)
+            prompt_space = tokenizer(
+                prompt_space_decoded, return_tensors="pt", add_special_tokens=False
+            ).input_ids.to(device)
+            return f"Replaced message at index {message_index}"
+        else:
+            return f"Invalid message index: {message_index}"
+    except Exception as e:
+        return f"Error replacing message: {e}"
+
+
+def replace_section(start_index: int, end_index: int, replacement_text: str) -> str:
+    """Replaces a section of the conversation.
+
+    Args:
+        start_index: The starting index of the section.
+        end_index: The ending index of the section.
+        replacement_text: The text to replace the section with.
+
+    Returns:
+        A success message or an error message.
+    """
+    global prompt_space_decoded
+    global prompt_space
+    try:
+        messages = prompt_space_decoded.split("<|eom_id|>")
+        if 0 <= start_index <= end_index < len(messages):
+            replaced_section = "<|eom_id|>".join(messages[start_index : end_index + 1])
+            messages[start_index : end_index + 1] = [
+                replacement_text
+            ]  # Replace the section
+            prompt_space_decoded = "<|eom_id|>".join(messages)
+            prompt_space = tokenizer(
+                prompt_space_decoded, return_tensors="pt", add_special_tokens=False
+            ).input_ids.to(device)
+            return f"Replaced section  
+        else:
+            return "Invalid start or end index for replacement."
+    except Exception as e:
+        return f"Error replacing section: {e}"
+
+
 tools = [
     get_embedding_for_token,
     add_vector_shift,
     add_cosine_shift,
     highest_token_probs,
+    replace_message,
+    replace_section,
 ]
 
 
