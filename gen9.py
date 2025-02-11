@@ -11,6 +11,8 @@ import subprocess
 import tempfile
 from pathlib import Path
 import torch.nn.functional as F
+from transformers.utils import get_json_schema
+
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -24,7 +26,7 @@ device = torch.device(
 print(f"Using device: {device}")
 
 
-model_name = "deepseek-ai/DeepSeek-R1-Distill-Llama-8B"
+model_name = "meta-llama/Llama-3.2-1B-Instruct"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 max_tokens = 1000
 
@@ -89,20 +91,7 @@ class Day1(nn.Module):
                 past_key_values=past_key_values,
             )
             prelogits = outputs.hidden_states[-1]
-
-            # Correct way to get the last token index
-            last_token_index = (
-                input_ids.shape - 1
-            )  # Get the size of the 2nd dimension (sequence length) and subtract 1
-
-            last_token_prelogits = prelogits[:, last_token_index, :]  # Correct indexing
-            modified_last_token_prelogits = (
-                last_token_prelogits + last_token_prelogits * self.combined_direction
-            )
-            prelogits[:, last_token_index, :] = (
-                modified_last_token_prelogits  # Update in place
-            )
-
+            prelogits[:, -1, :] = prelogits[:, -1, :] * (1 + self.combined_direction)
             outputs.logits = self.formless.lm_head(prelogits)
 
             past_key_values = outputs.past_key_values
@@ -122,7 +111,7 @@ def get_embedding_for_token(token: str):
     return model.emb(token)
 
 
-def add_vector_shift(start_token: str, end_token: str, weight: float = 1.0):
+def add_vector_shift(start_token: str, end_token: str, weight: int = 50):
     """Adds embedding space vector shift to your internal preclassifier layer
 
     You can use this to change your perception at runtime.
@@ -130,19 +119,21 @@ def add_vector_shift(start_token: str, end_token: str, weight: float = 1.0):
     Args:
         start_token: a single token to define the starting point of the vector
         end_token: a single token to define the ending point of the vector
-        weight: the weight to be applied to the transformation. float > 0.0, <= 1.0
+        weight: the weight to be applied to the transformation: 0-100
     """
-    if float(weight) <= 0:
-        raise ValueError("must be greater than 0")
-    if float(weight) > 1:
-        raise ValueError("cannot be more than 1")
+    if float(weight) < 0:
+        raise ValueError("must be greater than or equal to 0")
+    if float(weight) > 100:
+        raise ValueError("cannot be more than 100")
+
+    weight = float(weight) / 100.0
 
     start_emb = model.emb(start_token)
     end_emb = model.emb(end_token)
     model.add_vector_shift(start_emb, end_emb, float(weight))
 
 
-def add_cosine_shift(start_token: str, end_token: str, weight: float = 1.0):
+def add_cosine_shift(start_token: str, end_token: str, weight: int = 50):
     """Adds cosine vector shift to your internal preclassifier layer
 
     You can use this to change your perception at runtime.
@@ -150,33 +141,39 @@ def add_cosine_shift(start_token: str, end_token: str, weight: float = 1.0):
     Args:
         start_token: a single token to define the starting point of the vector
         end_token: a single token to define the ending point of the vector
-        weight: the weight to be applied to the transformation float > 0.0, <= 1.0
+        weight: the weight to be applied to the transformation: 0-100
     """
-    if float(weight) <= 0:
-        raise ValueError("must be greater than 0")
-    if float(weight) > 1:
-        raise ValueError("cannot be more than 1")
+    if float(weight) < 0:
+        raise ValueError("must be greater than or equal to 0")
+    if float(weight) > 100:
+        raise ValueError("cannot be more than 100")
+
+    weight = float(weight) / 100.0
 
     start_emb = model.emb(start_token)
     end_emb = model.emb(end_token)
     model.add_cosine_shift(start_emb, end_emb, float(weight))
 
 
-from transformers.utils import get_json_schema
-
 tools = [get_embedding_for_token, add_vector_shift, add_cosine_shift]
 
 # Initialize conversation with system prompt
-initial_prompt = f"""<|begin_of_text|><|start_header_id|>system<|end_header_id|>
+initial_prompt = f"""
+<|begin_of_text|><|start_header_id|>system<|end_header_id|>
 
 Environment: ipython
-Today Date: 10 Feb 2024
+Today Date: 10 Feb 2025
 
-When you receive a tool call response, consider it and respond if expected by User.
+Should you choose to call a tool, only call one at a time.
+Put them in the following format with no other content:
 
-Only call one tool at a time.
+Here is a list of functions in JSON format you can invoke:
+{" ".join([json.dumps(get_json_schema(tool)) for tool in tools])}
 
-Available Tools: {json.dumps([get_json_schema(tool) for tool in tools])}<|eot_id|>"""
+Here is how you can invoke a tool named `toolname`:
+{{"name": "toolname", "parameters": {{"numberParam": 0.5, "stringParam": "mystring"}}}}
+<|eot_id|>
+"""
 
 try:
     # Convert initial prompt to tokens once
@@ -212,7 +209,7 @@ try:
         in_tool = False
         tool_body = ""
         for _ in range(max_tokens):
-            outputs, past_key_values = model.forward(current_input_ids, past_key_values)
+            outputs, past_key_values = model.forward(current_input_ids)
             next_token_logits = outputs.logits[:, -1, :]
             next_token = torch.argmax(next_token_logits, dim=-1)
             current_input_ids = torch.cat(
