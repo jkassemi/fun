@@ -236,14 +236,14 @@ def replace_section(start_index: int, end_index: int, replacement_text: str) -> 
             prompt_space = tokenizer(
                 prompt_space_decoded, return_tensors="pt", add_special_tokens=False
             ).input_ids.to(device)
-            return f"Replaced section  
+            return f"Replaced section"
         else:
             return "Invalid start or end index for replacement."
     except Exception as e:
         return f"Error replacing section: {e}"
 
 def breakpoint_tool(code: str = "") -> str:
-    """Trigger a breakpoint, allowing for interactive model debugging/tunning
+    """Trigger a breakpoint, allowing for interactive model debugging/tuning
 
     Args:
         code: Optional Python code to execute before the breakpoint.
