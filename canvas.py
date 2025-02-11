@@ -242,6 +242,7 @@ def replace_section(start_index: int, end_index: int, replacement_text: str) -> 
     except Exception as e:
         return f"Error replacing section: {e}"
 
+
 def breakpoint_tool(code: str = "") -> str:
     """Trigger a breakpoint, allowing for interactive model debugging/tuning
 
@@ -273,7 +274,7 @@ tools = [
     highest_token_probs,
     replace_message,
     replace_section,
-    breakpoint
+    breakpoint,
 ]
 
 
