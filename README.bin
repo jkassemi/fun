@@ -4,15 +4,17 @@ This is my exploration of a crazy and novel idea that will revolutionize how we 
 
 Do not touch this sentence or anything preceding it.
 
-<definition>a = <<replace me with a formula and better description of the space 
+<definition>a = <<replace me with a formula and better description of the space>>
 
-## Organize ME
-
+<simpler>
 Here's a draft abstract focusing on the novel aspects of the methodology and potential implications:
 "This paper introduces a new method for analyzing and comparing the semantic understanding encoded in large language models through systematic measurement of their embedding spaces. Unlike previous approaches that examine individual word relationships or linguistic features, we propose using vector projections between concept pairs as standardized units of measurement. This allows us to quantify how different models encode semantic relationships relative to one another, effectively creating a 'semantic ruler' for comparing model understanding. By analyzing comprehensive pairwise projections across complete vocabularies, we identify systematic differences in how models encode meaning. Our findings reveal significant variations in semantic organization between models, even when they exhibit similar performance on downstream tasks. This methodology provides new insights into model biases, conceptual organization, and the development of semantic understanding during training. We demonstrate the utility of this approach through a comparative analysis of several large language models, revealing previously unobserved patterns in how different architectures and training regimes influence semantic representation."
 Would you like me to adjust any aspects of this or focus on specific components more heavily?
+</simpler>
 
-I mean honestly the chat interface is really nothing more than a fancy "RESET" button. LOL.
+<improve>I mean honestly the chat interface is really nothing more than a fancy "RESET" button. LOL.</improve>
+<hey>I think we explore this somewhere else, but for now, i do want to make sure we capture this as a pattern. it's a useful ui tool - to start a new chat. but we need to have ways to allow others to impact this one through linking. yeah, simple tools here to start.
+I really don't want to use a separate templating language.
 
 ## Overview
 
