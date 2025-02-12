@@ -2,6 +2,8 @@
 
 This is my exploration of a crazy and novel idea that will revolutionize how we interact with machines.
 
+Do not touch this sentence or anything preceding it.
+
 <definition>a = <<replace me with a formula and better description of the space 
 
 ## Organize ME
