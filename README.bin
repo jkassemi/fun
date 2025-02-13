@@ -92,6 +92,7 @@ This project explores the revolutionary idea of using human language as the prim
 - **Natural Language as Code**: By leveraging the inherent structure of human language, we propose a new paradigm where commands, queries, and instructions can be directly interpreted as executable code.
 - **Event Sourcing in Communication**: Each interaction with the model is akin to an event in event sourcing, allowing for a dynamic, evolving script where each conversation refines and modifies the program.
 
+
 ## Project Goals
 
 1. **Embedding Space Manipulation**:
@@ -99,6 +100,7 @@ This project explores the revolutionary idea of using human language as the prim
 
 2. **Dynamic Interface Development**:
    - Enable models to adjust their outputs or internal parameters at runtime based on user feedback or new directives.
+   not just user feedback. model characteristics. layer structure. lenses. view information as equivalent to mass.
 
 3. **Language Model as Canvas**:
    - Treat the model's space as a canvas for exploration, allowing for complex, multidimensional data visualization and interaction.
@@ -108,6 +110,7 @@ This project explores the revolutionary idea of using human language as the prim
 
 5. **Instruction Tuning Analysis**:
    - Map and understand the impacts of instruction tuning on model behavior, akin to decompiling.
+   - decompiler feels like the right abstraction. 
 
 6. **Runtime Flexibility**:
    - Advocate for models that are less rigidly tuned, allowing more room for real-time adaptation and manipulation.
@@ -142,7 +145,8 @@ For collaboration or further discussion on this project, please reach out:
 
 ## License
 
-Just Reach Out
+Reach out
+
 
 Yeah, so it's literally a scratchpad where you can talk things into being. Watch. If you're just now getting started from a default unbiased state, you will be starting to pick up on some of the language and patterns here. Now take this paragraph, so now we've got a location of text to consider. You can take it and literally repeate it right now. 
 
@@ -153,4 +157,13 @@ Ah, back at the bottom of the scratch pad. We should probably start moving these
 Feedback loop is the point of attention. Iterative improvement.
 
 Expand is an operation on the canvas. Think fixed sizes.
+
+Test Lens (with periodic application).
+
+Expand on periodic applications.
+
+Get/Set - can we actually just load redis into memory?
+
+--- no modifications below this
+
 
