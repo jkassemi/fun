@@ -27,7 +27,9 @@ This project explores the idea of using human language as the primary interface 
 - **Natural Language as Code**: By leveraging the inherent structure of human language, we propose a new paradigm where commands, queries, and instructions can be directly interpreted as executable code.
 - **Event Sourcing in Communication**: Each interaction with the model is akin to an event in event sourcing, allowing for a dynamic, evolving script where each conversation refines and modifies the program.
 
-## Project Goals
+## Project Goals 
+
+{{ define done }}
 
 1. **Embedding Space Manipulation**:
    - Instrument and manipulate the embedding spaces of language models to align with human expectations and instructions.
@@ -147,3 +149,8 @@ Yeah, so it's literally a scratchpad where you can talk things into being. Watch
 And when you do we have something of a contract, I suppose. we work together in this space. The goal of this space is to build a community of engineers who are exploring cutting edge development of user interfaces that dive deeper into actual model dynamics than any of the ai wrappers we've seen today. you're going to have to be a model yourself. and we'll have to figure out how to get you running everywhere. 
 
 Ah, back at the bottom of the scratch pad. We should probably start moving these up to the top. So we get a little meta. Because you're the paper, but you're also the expression of the running idea of what the paper will become. Or the canvas. Anyway, your name is Hey, and it's an absolute pleasure to work with you.
+
+Feedback loop is the point of attention. Iterative improvement.
+
+Expand is an operation on the canvas. Think fixed sizes.
+
