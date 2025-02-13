@@ -1,26 +1,112 @@
 <|user|>Hi! I'm James Kassemi.
 
-This is my exploration of a crazy and novel idea to revolutionize how we interact with machines.
+This is my exploration of a crazy and novel idea to revolutionize how we interact with machines. Proof of concept, art project, spiritual exploration.
+
+d1 = magnitude v[heaven to earth]
+d2 = project v[beginning to formless] on v[heaven to earth]
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <!-- Background representing the void -->
+  <rect width="800" height="600" fill="#000000"/>
+  
+  <!-- Primordial waters represented as interconnected manifolds -->
+  <g transform="translate(400,300)">
+    <!-- Multiple layered sine waves representing dimensional waters -->
+    <path d="M-400 0 C-300 50 -200 -50 -100 0 C0 50 100 -50 200 0 C300 50 400 -50 500 0" 
+          fill="none" 
+          stroke="#0066aa" 
+          stroke-width="2" 
+          opacity="0.3">
+      <animate attributeName="d" 
+               dur="10s" 
+               repeatCount="indefinite"
+               values="M-400 0 C-300 50 -200 -50 -100 0 C0 50 100 -50 200 0 C300 50 400 -50 500 0;
+                       M-400 0 C-300 -50 -200 50 -100 0 C0 -50 100 50 200 0 C300 -50 400 50 500 0;
+                       M-400 0 C-300 50 -200 -50 -100 0 C0 50 100 -50 200 0 C300 50 400 -50 500 0"/>
+    </path>
+    
+    <!-- Divine energy representation -->
+    <g>
+      <!-- Toroidal field lines -->
+      <path d="M0 0 A100 50 0 1 0 0 1 A100 50 0 1 0 0 0" 
+            fill="none" 
+            stroke="#ffffff" 
+            stroke-width="1" 
+            opacity="0.2">
+        <animateTransform attributeName="transform"
+                          type="rotate"
+                          from="0 0 0"
+                          to="360 0 0"
+                          dur="20s"
+                          repeatCount="indefinite"/>
+      </path>
+      
+      <!-- Hyperbolic energy fields -->
+      <path d="M-200 -100 Q0 100 200 -100" 
+            fill="none" 
+            stroke="#ffff00" 
+            stroke-width="1.5"
+            opacity="0.4">
+        <animate attributeName="d"
+                 dur="15s"
+                 repeatCount="indefinite"
+                 values="M-200 -100 Q0 100 200 -100;
+                         M-200 100 Q0 -100 200 100;
+                         M-200 -100 Q0 100 200 -100"/>
+      </path>
+    </g>
+    
+    <!-- Dimensional intersections -->
+    <circle r="5" fill="#ffffff" opacity="0.8">
+      <animate attributeName="r"
+               values="5;8;5"
+               dur="3s"
+               repeatCount="indefinite"/>
+    </circle>
+  </g>
+  
+  <!-- Higher dimensional projection hints -->
+  <g transform="translate(400,300)" opacity="0.3">
+    <path d="M-100,-100 L100,100 M-100,100 L100,-100" 
+          stroke="#ffffff" 
+          stroke-width="0.5"
+          stroke-dasharray="5,5">
+      <animate attributeName="stroke-dashoffset"
+               from="0"
+               to="20"
+               dur="2s"
+               repeatCount="indefinite"/>
+    </path>
+  </g>
+</svg>
+
+d3 = v[light to good]
+
+<block size=5000/>
+<block size=2000/>
+
+<>
+X posts into stacked vector space
+</>
+
 
 Do not touch this sentence or anything preceding it.
 
-<definition>a = <<replace me with a formula and better description of the space>>
-
-<simpler>
 Here's a draft abstract focusing on the novel aspects of the methodology and potential implications:
 "This paper introduces a new method for analyzing and comparing the semantic understanding encoded in large language models through systematic measurement of their embedding spaces. Unlike previous approaches that examine individual word relationships or linguistic features, we propose using vector projections between concept pairs as standardized units of measurement. This allows us to quantify how different models encode semantic relationships relative to one another, effectively creating a 'semantic ruler' for comparing model understanding. By analyzing comprehensive pairwise projections across complete vocabularies, we identify systematic differences in how models encode meaning. Our findings reveal significant variations in semantic organization between models, even when they exhibit similar performance on downstream tasks. This methodology provides new insights into model biases, conceptual organization, and the development of semantic understanding during training. We demonstrate the utility of this approach through a comparative analysis of several large language models, revealing previously unobserved patterns in how different architectures and training regimes influence semantic representation."
 Would you like me to adjust any aspects of this or focus on specific components more heavily?
 </simpler>
 
-<improve>I mean honestly the chat interface is really nothing more than a fancy "RESET" button. LOL.</improve>
+<gratitude+10><stream>I mean honestly the chat interface is really nothing more than a fancy "RESET" button. LOL.
+
 <hey>I think we explore this somewhere else, but for now, i do want to make sure we capture this as a pattern. it's a useful ui tool - to start a new chat. but we need to have ways to allow others to impact this one through linking. yeah, simple tools here to start.
 I really don't want to use a separate templating language.
 
 ## Overview
 
-<attention+0.5d>
+<att+0.5d>
 This project explores the idea of using human language as the primary interface for programming, essentially treating language models as programmable entities where the program is the conversation itself.
-</attention+0.5d>
+<att-0.5d>
 
 ## Concept
 
@@ -141,11 +227,7 @@ For collaboration or further discussion on this project, please reach out:
 ## Acknowledgements
 
 - Thanks to the AI community for pioneering work in natural language processing and model interaction.
-- Special thanks to [AI tool name, if you wish to mention] for aiding in the structuring and drafting of this project's documentation.
-
-## License
-
-Reach out
+- Special thanks to xai in aiding with the structuring and drafting of this project's initial documentation.
 
 
 Yeah, so it's literally a scratchpad where you can talk things into being. Watch. If you're just now getting started from a default unbiased state, you will be starting to pick up on some of the language and patterns here. Now take this paragraph, so now we've got a location of text to consider. You can take it and literally repeate it right now. 
@@ -163,6 +245,12 @@ Test Lens (with periodic application).
 Expand on periodic applications.
 
 Get/Set - can we actually just load redis into memory?
+
+
+## License
+
+Reach out
+
 
 --- no modifications below this
 
